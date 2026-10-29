@@ -1,6 +1,6 @@
 # TinyEditor
 
-面向本地文本文件的轻量原生 macOS 编辑器。应用名 **TinyEditor**，无空格。最低 macOS 13；本次构建为 **Apple Silicon / arm64**。
+面向本地文本文件的轻量原生 macOS 编辑器。当前版本 **1.0.1**，修复关闭标签和侧边栏鼠标操作。应用名 **TinyEditor**，无空格。最低 macOS 13；本次构建为 **Apple Silicon / arm64**。
 
 - TXT、Markdown、JSON、YAML；标题栏手动选择格式并按文件路径记忆。
 - AppKit 原生纯文本编辑、撤销/重做、查找/替换、逻辑行号与自动换行。

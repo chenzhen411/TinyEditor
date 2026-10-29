@@ -166,6 +166,7 @@ enum IntegrationCheck {
       }
       doc.resolveRecovery()
       for d in Array(second.documents) { second.remove(d) }
+      await interactionRegressions()
       let fixture =
         "# 验证\r\n\r\n普通原文\r\n\r\n**粗体** 与 [链接](https://example.com) 及 &amp; 和 \\*转义\\*\r\n\r\n- 列表\r\n- [x] 任务\r\n\r\n> 引用\r\n\r\n| A | B |\r\n|---|---|\r\n| 一 | 二 |\r\n\r\n```json\r\n{\"key\": true}\r\n```\r\n\r\n```mermaid\r\ngraph TD\r\n A[开始] --> B[结束]\r\n```\r\n\r\n行内 $x^2$\r\n\r\n$$\r\n\\frac{a}{b}\r\n$$\r\n\r\n<div>HTML <em>斜体</em></div>\r\n\r\n<script>window.UNSAFE=1</script>\r\n<img src=\"https://example.com/no.png\" onerror=\"window.UNSAFE=1\">\r\n"
       let mdURL = root.appendingPathComponent("preview.md")
@@ -340,6 +341,64 @@ enum IntegrationCheck {
     guard let types = NSPasteboard.general.types else { return false }
     return !types.isEmpty
       && types.allSatisfy { $0 == .string || $0.rawValue == "NSStringPboardType" }
+  }
+  func interactionRegressions() async {
+    let app = AppController.shared
+    let moving = EditorDocument(text: "drag identity 😀")
+    let source = app.newWindow(with: moving)
+    source.window?.contentView?.layoutSubtreeIfNeeded()
+    source.tabStrip.layoutSubtreeIfNeeded()
+    weak var originalCell = source.tabStrip.cells.first
+    guard !source.tabStrip.cells.isEmpty else {
+      check("drag-source-fixture", false)
+      return
+    }
+    _ = DragCoordinator.shared.begin(moving, source: source, cell: source.tabStrip.cells[0])
+    source.installDropOverlay()
+    source.dropOverlay?.hovering = true
+    source.tabStrip.rebuild()
+    source.tabStrip.layoutSubtreeIfNeeded()
+    await pause(0.05)
+    check(
+      "drag-source-retained-after-strip-rebuild",
+      originalCell != nil && DragCoordinator.shared.sourceCell === originalCell
+    )
+    if let frame = source.window?.contentView?.superview,
+      let close = source.tabStrip.cells.first?.closeButton
+    {
+      let point = close.convert(NSPoint(x: close.bounds.midX, y: close.bounds.midY), to: frame)
+      let hit = frame.hitTest(point)
+      check("drag-hint-does-not-block-close", hit === close || hit?.isDescendant(of: close) == true)
+      let button = source.sidebarButton
+      let p = button.convert(NSPoint(x: button.bounds.midX, y: button.bounds.midY), to: frame)
+      let toolbarHit = frame.hitTest(p)
+      check(
+        "drag-hint-does-not-block-toolbar",
+        toolbarHit === button || toolbarHit?.isDescendant(of: button) == true)
+    }
+    source.sidebarButton.performClick(nil)
+    check(
+      "sidebar-native-button-opens",
+      source.sidebarVisible && !source.sidebar.isHidden && source.sidebar.frame.width >= 170)
+    source.sidebarButton.performClick(nil)
+    check("sidebar-native-button-closes", !source.sidebarVisible && source.sidebar.isHidden)
+    let blank = EditorDocument()
+    source.add(blank)
+    source.tabStrip.layoutSubtreeIfNeeded()
+    source.tabStrip.cells.last?.closeButton.performClick(nil)
+    check(
+      "close-native-button-removes-only-tab",
+      source.documents.count == 1 && source.active === moving)
+    let target = app.newWindow()
+    app.move(moving, from: source, to: target, index: 1)
+    check(
+      "drag-source-retained-after-source-window-closes",
+      originalCell != nil && DragCoordinator.shared.sourceCell === originalCell)
+    DragCoordinator.shared.finish(at: target.window!.frame.origin, operation: .move)
+    check(
+      "drag-end-releases-context",
+      DragCoordinator.shared.token == nil && DragCoordinator.shared.sourceCell == nil)
+    for doc in Array(target.documents) { target.remove(doc) }
   }
   func benchmark(mb: Int, single: Bool) async {
     do {

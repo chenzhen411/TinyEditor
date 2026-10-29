@@ -60,8 +60,42 @@ enum UITestPreparation {
         NSPoint(x: 150, y: right.window!.contentView!.bounds.height - 20)),
       "dropStatus": point(right, right.status, NSPoint(x: 150, y: 12)),
     ]
+    snapshot(event: "fixtures-ready")
     if let json = try? JSONSerialization.data(withJSONObject: data, options: .prettyPrinted) {
       try? json.write(to: root.appendingPathComponent("ui-layout.json"))
     }
   }
+  static func snapshot(event: String) {
+    guard let folder = ProcessInfo.processInfo.environment["TINYEDITOR_UI_FIXTURES"],
+      ProcessInfo.processInfo.environment["TINYEDITOR_DATA_DIR"] != nil
+    else { return }
+    let windows: [[String: Any]] = AppController.shared.windows.map { owner in
+      let docs: [[String: Any]] = owner.documents.map { doc in
+        [
+          "id": doc.id.uuidString, "name": doc.name, "dirty": doc.isDirty,
+          "canUndo": doc.undo.canUndo, "canRedo": doc.undo.canRedo,
+          "text": doc.storage.length < 20000 ? doc.text : "<large>",
+          "format": doc.format.rawValue, "preview": doc.previewing,
+          "selection": NSStringFromRange(doc.selection),
+        ]
+      }
+      return [
+        "number": owner.window?.windowNumber ?? -1,
+        "frame": NSStringFromRect(owner.window?.frame ?? .zero),
+        "active": owner.active?.name ?? "", "sidebar": owner.sidebarVisible,
+        "sidebarWidth": owner.sidebar.frame.width, "documents": docs,
+      ]
+    }
+    let value: [String: Any] = [
+      "event": event, "time": Date().timeIntervalSince1970,
+      "dragActive": DragCoordinator.shared.token != nil, "windows": windows,
+    ]
+    let root = URL(fileURLWithPath: folder)
+    if let data = try? JSONSerialization.data(
+      withJSONObject: value, options: [.prettyPrinted, .sortedKeys])
+    {
+      try? data.write(to: root.appendingPathComponent("state.json"), options: .atomic)
+    }
+  }
+
 }

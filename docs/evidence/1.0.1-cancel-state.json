@@ -1,0 +1,47 @@
+{
+  "dragActive" : false,
+  "event" : "drag-cancelled",
+  "time" : 1793243344.8167439,
+  "windows" : [
+    {
+      "active" : "source.txt",
+      "documents" : [
+        {
+          "canRedo" : false,
+          "canUndo" : false,
+          "dirty" : false,
+          "format" : "auto",
+          "id" : "CEA77616-221B-43B5-AC94-9E789C1F7D1C",
+          "name" : "source.txt",
+          "preview" : false,
+          "selection" : "{0, 0}",
+          "text" : "原生编辑验证\n中文、Unicode 😀\n第三行\n"
+        }
+      ],
+      "frame" : "{{20, 130}, {825, 660}}",
+      "number" : 1973,
+      "sidebar" : false,
+      "sidebarWidth" : 0
+    },
+    {
+      "active" : "preview.md",
+      "documents" : [
+        {
+          "canRedo" : false,
+          "canUndo" : false,
+          "dirty" : false,
+          "format" : "auto",
+          "id" : "2B5FE234-26DD-4D25-BF68-5FF98C6B8756",
+          "name" : "preview.md",
+          "preview" : true,
+          "selection" : "{0, 0}",
+          "text" : "# TinyEditor\n\n轻量、原生、离线。\n\n**Markdown 原文复制** 与 [本地文档](source.txt)。\n\n- [x] 原生编辑\n- [x] 离线预览\n\n```mermaid\ngraph LR\n A[原文] --> B[预览]\n```\n\n公式：$E=mc^2$\n"
+        }
+      ],
+      "frame" : "{{865, 130}, {825, 660}}",
+      "number" : 1974,
+      "sidebar" : false,
+      "sidebarWidth" : 0
+    }
+  ]
+}

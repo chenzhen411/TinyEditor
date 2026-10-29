@@ -1,109 +1,5 @@
 import AppKit
 
-let tabDragType = NSPasteboard.PasteboardType("top.moriarty.TinyEditor.tab")
-final class DragCoordinator: NSObject {
-  static let shared = DragCoordinator()
-  var token: String?
-  var document: EditorDocument?
-  weak var source: EditorWindowController?
-  var accepted = false
-  var cancelled = false
-  var monitor: Any?
-  func begin(_ doc: EditorDocument, source: EditorWindowController) -> String {
-    dragLog("begin \(doc.name)")
-    token = UUID().uuidString
-    document = doc
-    self.source = source
-    accepted = false
-    cancelled = false
-    monitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
-      if event.keyCode == 53 { self?.cancelled = true }
-      return event
-    }
-    AppController.shared.windows.forEach { $0.installDropOverlay() }
-    return token!
-  }
-  func valid(_ info: NSDraggingInfo) -> Bool {
-    guard let token, document != nil, info.draggingSource is TabCell else { return false }
-    return info.draggingPasteboard.string(forType: tabDragType) == token
-  }
-  func finish(at point: NSPoint, operation: NSDragOperation) {
-    dragLog(
-      "finish \(point) operation=\(operation.rawValue) accepted=\(accepted) cancelled=\(cancelled)")
-    defer {
-      if let monitor { NSEvent.removeMonitor(monitor) }
-      monitor = nil
-      token = nil
-      document = nil
-      source = nil
-      AppController.shared.windows.forEach {
-        $0.dropOverlay?.removeFromSuperview()
-        $0.dropOverlay = nil
-      }
-    }
-    let escape =
-      cancelled || (NSApp.currentEvent?.keyCode == 53 && NSApp.currentEvent?.type == .keyDown)
-    if !accepted && !escape && operation.isEmpty, let doc = document, let source,
-      !source.window!.frame.contains(point)
-    {
-      AppController.shared.detach(doc, from: source, point: point)
-    }
-  }
-}
-final class DropOverlay: NSView {
-  weak var owner: EditorWindowController?
-  var hovering = false { didSet { needsDisplay = true } }
-  init(owner: EditorWindowController, frame: NSRect) {
-    self.owner = owner
-    super.init(frame: frame)
-    registerForDraggedTypes([tabDragType])
-    autoresizingMask = [.width, .height]
-  }
-  required init?(coder: NSCoder) { fatalError() }
-  override func hitTest(_ point: NSPoint) -> NSView? {
-    DragCoordinator.shared.token == nil ? nil : super.hitTest(point)
-  }
-  override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
-    hovering = DragCoordinator.shared.valid(sender)
-    if hovering { dragLog("entered \(owner?.active?.name ?? "?")") }
-    return hovering ? .move : []
-  }
-  override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation {
-    draggingEntered(sender)
-  }
-  override func draggingExited(_ sender: NSDraggingInfo?) { hovering = false }
-  override func prepareForDragOperation(_ sender: NSDraggingInfo) -> Bool {
-    DragCoordinator.shared.valid(sender)
-  }
-  override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-    guard DragCoordinator.shared.valid(sender), let owner,
-      let doc = DragCoordinator.shared.document, let source = DragCoordinator.shared.source
-    else { return false }
-    let point = owner.tabStrip.convert(sender.draggingLocation, from: nil)
-    let index = owner.tabStrip.insertionIndex(at: point)
-    dragLog("perform \(doc.name) -> \(owner.active?.name ?? "?") index=\(index)")
-    AppController.shared.move(doc, from: source, to: owner, index: index)
-    DragCoordinator.shared.accepted = true
-    hovering = false
-    return true
-  }
-  override func concludeDragOperation(_ sender: NSDraggingInfo?) { hovering = false }
-  override func draw(_ rect: NSRect) {
-    if hovering {
-      let box = bounds.insetBy(dx: 4, dy: 4)
-      NSColor.controlAccentColor.withAlphaComponent(0.15).setFill()
-      NSBezierPath(roundedRect: box, xRadius: 8, yRadius: 8).fill()
-      let attrs: [NSAttributedString.Key: Any] = [
-        .font: NSFont.systemFont(ofSize: 12), .foregroundColor: NSColor.labelColor,
-      ]
-      let value = "移到此窗口" as NSString
-      let size = value.size(withAttributes: attrs)
-      value.draw(
-        at: NSPoint(x: (bounds.width - size.width) / 2, y: bounds.height - 75),
-        withAttributes: attrs)
-    }
-  }
-}
 final class TabCell: NSView, NSDraggingSource {
   weak var owner: EditorWindowController?
   let document: EditorDocument
@@ -132,14 +28,17 @@ final class TabCell: NSView, NSDraggingSource {
     addSubview(closeButton)
     refresh()
     setAccessibilityElement(true)
-    setAccessibilityRole(.button)
+    setAccessibilityRole(.group)
     setAccessibilityLabel(document.name)
   }
   required init?(coder: NSCoder) { fatalError() }
   override var isFlipped: Bool { true }
+  override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
   override func hitTest(_ point: NSPoint) -> NSView? {
-    let hit = super.hitTest(point)
-    return hit === closeButton ? hit : (hit == nil ? nil : self)
+    let local = convert(point, from: superview)
+    guard bounds.contains(local) else { return nil }
+    if !closeButton.isHidden && closeButton.frame.contains(local) { return closeButton }
+    return self
   }
   override func layout() {
     super.layout()
@@ -149,7 +48,7 @@ final class TabCell: NSView, NSDraggingSource {
   func refresh() {
     title.stringValue = (document.isDirty ? "• " : "") + document.name
     toolTip = document.url?.path ?? document.name
-    closeButton.isHidden = !hovering
+    closeButton.isHidden = !(hovering || owner?.active === document)
     needsDisplay = true
   }
   override func draw(_ rect: NSRect) {
@@ -181,7 +80,8 @@ final class TabCell: NSView, NSDraggingSource {
   override func mouseDragged(with event: NSEvent) {
     let point = convert(event.locationInWindow, from: nil)
     guard hypot(point.x - mouseOrigin.x, point.y - mouseOrigin.y) > 4, let owner else { return }
-    let token = DragCoordinator.shared.begin(document, source: owner)
+    guard DragCoordinator.shared.token == nil else { return }
+    let token = DragCoordinator.shared.begin(document, source: owner, cell: self)
     let item = NSPasteboardItem()
     item.setString(token, forType: tabDragType)
     let drag = NSDraggingItem(pasteboardWriter: item)
@@ -204,6 +104,9 @@ final class TabCell: NSView, NSDraggingSource {
   func draggingSession(
     _ session: NSDraggingSession, endedAt screenPoint: NSPoint, operation: NSDragOperation
   ) { DragCoordinator.shared.finish(at: screenPoint, operation: operation) }
+  func draggingSession(_ session: NSDraggingSession, movedTo screenPoint: NSPoint) {
+    dragLog("moved \(screenPoint)")
+  }
   @objc func closeTab() { owner?.close(document) }
   override func menu(for event: NSEvent) -> NSMenu? {
     let menu = NSMenu()
@@ -294,10 +197,11 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
       labels: ["预览", "编辑"], trackingMode: .selectOne, target: nil, action: nil)
   var sidebarVisible = false, sidebarWidth: CGFloat = 220
   var dropOverlay: DropOverlay?
+  private var isLayingOut = false
   var closingAll = false
   var conflictPrompted: Set<UUID> = []
   init(inheritSidebar: EditorWindowController? = nil) {
-    let window = NSWindow(
+    let window = EditorWindow(
       contentRect: NSRect(x: 0, y: 0, width: 1000, height: 720),
       styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
       backing: .buffered, defer: false)
@@ -314,6 +218,9 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     window.isRestorable = false
     super.init(window: window)
     window.delegate = self
+    window.editorOwner = self
+    window.acceptsMouseMovedEvents = true
+    window.registerForDraggedTypes([tabDragType])
     window.center()
     if let inheritSidebar {
       sidebarVisible = inheritSidebar.sidebarVisible
@@ -376,7 +283,9 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
   required init?(coder: NSCoder) { fatalError() }
   deinit { NotificationCenter.default.removeObserver(self) }
   func layoutContent() {
-    guard let root = window?.contentView else { return }
+    guard !isLayingOut, let root = window?.contentView else { return }
+    isLayingOut = true
+    defer { isLayingOut = false }
     let top = window?.contentLayoutRect.maxY ?? root.bounds.height
     tabStrip.frame = NSRect(x: 0, y: top - 28, width: root.bounds.width, height: 28)
     split.frame = NSRect(x: 0, y: 0, width: root.bounds.width, height: max(0, top - 28))
@@ -423,6 +332,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     if document.preview?.superview !== host { document.schedulePreviewRelease() }
     updateChrome()
     tabStrip.reveal(document)
+    UITestPreparation.snapshot(event: "tab-activated")
   }
   func remove(_ document: EditorDocument) {
     guard let index = documents.firstIndex(where: { $0 === document }) else { return }
@@ -441,6 +351,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
       }
     }
     tabStrip.rebuild()
+    UITestPreparation.snapshot(event: "tab-removed")
     if documents.isEmpty {
       closingAll = true
       window?.close()
@@ -453,6 +364,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     else { return }
     tabStrip.refresh()
     if active === doc { updateChrome() }
+    UITestPreparation.snapshot(event: "document-changed")
     if doc.conflict && !conflictPrompted.contains(doc.id) && window?.attachedSheet == nil {
       conflictPrompted.insert(doc.id)
       promptConflict(doc)
@@ -517,10 +429,13 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
   }
   @objc func toggleSidebar() {
     sidebarVisible.toggle()
+    let preferredWidth = sidebarWidth
     sidebar.isHidden = !sidebarVisible
-    window?.contentView?.needsLayout = true
-    if sidebarVisible { split.setPosition(sidebarWidth, ofDividerAt: 0) }
+    split.adjustSubviews()
+    sidebarWidth = preferredWidth
     layoutContent()
+    window?.contentView?.needsLayout = true
+    UITestPreparation.snapshot(event: "sidebar-toggled")
   }
   @objc func preferencesChanged() {
     let theme = Settings.shared.theme
@@ -563,6 +478,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     ofSubviewAt dividerIndex: Int
   ) -> CGFloat { min(340, splitView.bounds.width - 300) }
   func splitViewDidResizeSubviews(_ notification: Notification) {
+    guard !isLayingOut else { return }
     if sidebarVisible && sidebar.frame.width >= 170 { sidebarWidth = min(340, sidebar.frame.width) }
     layoutContent()
   }
@@ -571,7 +487,8 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
   }
   func installDropOverlay() {
     guard dropOverlay == nil, let frame = window?.contentView?.superview else { return }
-    let overlay = DropOverlay(owner: self, frame: frame.bounds)
+    let overlay = DropOverlay(frame: frame.bounds)
+    overlay.autoresizingMask = [.width, .height]
     frame.addSubview(overlay, positioned: .above, relativeTo: nil)
     dropOverlay = overlay
   }

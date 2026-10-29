@@ -44,3 +44,13 @@ Initial environment: macOS 27.2, arm64; Swift 6.4 CLI tools, no full Xcode requi
 - macOS 13–26, Intel/Universal, multi-MB Markdown rendering, sidebar physical resize/scroll preservation require additional hardware/manual validation.
 - Long-line projection limits continuous mouse selection to the visible page. Full-source copy/save/find/replace and cross-page undo are implemented.
 - Mermaid tiny excludes mindmap/architecture and internal Mermaid KaTeX; document KaTeX is bundled separately. Local SVG images intentionally not served by resource handler.
+
+
+## 1.0.1 interaction fixes
+- Drag.swift owns window-level native drop routing. Hint views ALWAYS return nil from hitTest, even during a drag; never use an input-catching overlay to receive tabs.
+- Retain the TabCell draggingSource until the end callback, including strip rebuild/source window close. Set accepted before moving a document. Reset before detach. Source/session token validation remains in-process only.
+- Check NSEvent.type BEFORE keyCode; keyCode on mouse/AppKit events can throw an ObjC exception and skip Swift cleanup. Regression finish(.move) now completes.
+- Active tab exposes its close button as an independent accessibility element; exact close-button geometry routes mouse hits. Sidebar layout has reentry protection and restores preferred width after split adjustment.
+- 73 integration checks pass with normal process exit; 3,061 core assertions pass. 1.0.1 build 2 ZIP/signature/resources verified.
+- Real CUA coordinate clicks passed close second tab, sidebar open/close, dirty close cancellation, and controls after Escape. Full native cross-window release/detach still pending; CUA sends begin but no moved/destination/end until Escape. User CGEvent authorization requested asynchronously, NOT received and NOT assumed.
+- Evidence: docs/DRAG-REGRESSION-1.0.1.md and docs/evidence/1.0.1-*.

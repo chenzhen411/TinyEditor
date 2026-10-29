@@ -1,0 +1,9 @@
+2026-10-29 11:00:50.418 TinyEditor[49480:488056] Drag: mouseDown source.txt at=(509.0, 640.0) hit=Optional<NSView>
+2026-10-29 11:00:57.888 TinyEditor[49480:488056] error messaging the mach port for IMKCFRunLoopWakeUpReliable
+2026-10-29 11:01:01.948 TinyEditor[49480:488056] Drag: mouseDown 未命名.txt at=(243.0, 606.0) hit=Optional<NSView>
+2026-10-29 11:01:09.694 TinyEditor[49480:488056] Drag: mouseDown source.txt at=(537.0, 308.0) hit=Optional<NSView>
+2026-10-29 11:01:10.644 TinyEditor[49480:488056] Drag: mouseDown source.txt at=(115.0, 606.0) hit=Optional<NSView>
+2026-10-29 11:01:10.655 TinyEditor[49480:488056] Drag: begin source.txt
+2026-10-29 11:01:52.431 TinyEditor[49480:488056] Drag: finish (1016.0, 304.0) operation=0 accepted=false escape=true
+2026-10-29 11:01:59.615 TinyEditor[49480:488056] Drag: mouseDown source.txt at=(602.0, 640.0) hit=Optional<NSView>
+2026-10-29 11:02:05.498 TinyEditor[49480:488056] Drag: mouseDown source.txt at=(12.0, 606.0) hit=Optional<NSView>

@@ -407,7 +407,9 @@ final class AppController: NSObject, NSApplicationDelegate, NSMenuDelegate, NSMe
   }
   @objc func aboutAction(_ sender: Any?) {
     NSApp.orderFrontStandardAboutPanel(options: [
-      .applicationName: appName, .applicationVersion: "1.0.0",
+      .applicationName: appName,
+      .applicationVersion: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
+        as? String ?? "1.0.1",
       .credits: NSAttributedString(string: "轻量原生文本编辑器\nSwift · AppKit · 离线 Markdown"),
     ])
   }
