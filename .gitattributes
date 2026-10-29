@@ -1,0 +1,5 @@
+# Preserve upstream bundles byte-for-byte; their minified template strings contain whitespace.
+Resources/Preview/mermaid.js -whitespace linguist-vendored
+Resources/Preview/vendor.js -whitespace linguist-vendored
+Resources/Preview/katex.min.css -whitespace linguist-vendored
+Resources/Preview/fonts/** linguist-vendored
