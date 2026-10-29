@@ -1,0 +1,62 @@
+{
+  "method": "Fresh GUI process; filesystem and system caches NOT purged. mainToWindow excludes dyld before main; spawnToReadyObserved includes process creation, rendering and up to 5ms polling. RSS is resident memory, includes shared pages, not private footprint. Helper processes identified as new WebKit PIDs during each sample.",
+  "runs": [
+    {
+      "previewInstances": 0,
+      "previewReady": true,
+      "mainRSSMiB": 101.359375,
+      "mainToWindowMs": 681.4800500869751,
+      "pid": 47704,
+      "mainToReadyMs": 773.2720375061035,
+      "kind": "blank",
+      "spawnToReadyObservedMs": 784.6134169994912,
+      "newWebKitProcesses": {}
+    },
+    {
+      "pid": 47734,
+      "previewInstances": 0,
+      "mainToWindowMs": 207.8709602355957,
+      "mainToReadyMs": 270.2070474624634,
+      "mainRSSMiB": 101.484375,
+      "previewReady": true,
+      "kind": "blank",
+      "spawnToReadyObservedMs": 290.80537499976344,
+      "newWebKitProcesses": {}
+    },
+    {
+      "mainToWindowMs": 192.40295886993408,
+      "mainToReadyMs": 258.2249641418457,
+      "mainRSSMiB": 101.390625,
+      "previewInstances": 0,
+      "previewReady": true,
+      "pid": 47740,
+      "kind": "blank",
+      "spawnToReadyObservedMs": 272.7257920014381,
+      "newWebKitProcesses": {}
+    },
+    {
+      "pid": 47745,
+      "mainToReadyMs": 1215.0169610977173,
+      "mainRSSMiB": 109.765625,
+      "previewReady": true,
+      "previewInstances": 1,
+      "mainToWindowMs": 532.4289798736572,
+      "kind": "markdown",
+      "spawnToReadyObservedMs": 1224.3877910004812,
+      "newWebKitProcesses": {
+        "47747": {
+          "rssMiB": 23.9375,
+          "executable": "/System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.GPU.xpc/Contents/MacOS/com.apple.WebKit.GPU"
+        },
+        "47748": {
+          "rssMiB": 102.96875,
+          "executable": "/System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.WebContent.xpc/Contents/MacOS/com.apple.WebKit.WebContent"
+        },
+        "47749": {
+          "rssMiB": 15.09375,
+          "executable": "/System/Library/Frameworks/WebKit.framework/Versions/A/XPCServices/com.apple.WebKit.Networking.xpc/Contents/MacOS/com.apple.WebKit.Networking"
+        }
+      }
+    }
+  ]
+}

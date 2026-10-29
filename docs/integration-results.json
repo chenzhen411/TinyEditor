@@ -1,0 +1,399 @@
+{
+  "architecture": "arm64",
+  "date": "2026-10-29T02:34:00Z",
+  "os": "版本27.2（版号26B123）",
+  "passed": true,
+  "performance": [
+    {
+      "bytes": 999990,
+      "decodeAndModelMs": 30.34794330596924,
+      "editedLength": 799993,
+      "editedPrefix": "X0123456789 abcdef 中文 😀\n0",
+      "editToDisplayMs": 13.04006576538086,
+      "name": "1MB-multiline",
+      "openToDisplayMs": 147.6379632949829,
+      "rssAfterMB": 183.359375,
+      "rssBeforeMB": 155.625,
+      "undoAvailable": true,
+      "undoLength": 799992,
+      "undoPrefix": "0123456789 abcdef 中文 😀\n01",
+      "undoPreserved": true
+    },
+    {
+      "bytes": 9999990,
+      "decodeAndModelMs": 311.6490840911865,
+      "editedLength": 7999993,
+      "editedPrefix": "X0123456789 abcdef 中文 😀\n0",
+      "editToDisplayMs": 15.545010566711426,
+      "name": "10MB-multiline",
+      "openToDisplayMs": 426.15509033203125,
+      "rssAfterMB": 259.890625,
+      "rssBeforeMB": 204.609375,
+      "undoAvailable": true,
+      "undoLength": 7999992,
+      "undoPrefix": "0123456789 abcdef 中文 😀\n01",
+      "undoPreserved": true
+    },
+    {
+      "bytes": 30000000,
+      "decodeAndModelMs": 897.136926651001,
+      "editedLength": 24000001,
+      "editedPrefix": "X0123456789 abcdef 中文 😀\n0",
+      "editToDisplayMs": 15.036940574645996,
+      "name": "30MB-multiline",
+      "openToDisplayMs": 1020.6969976425171,
+      "rssAfterMB": 367.734375,
+      "rssBeforeMB": 326.328125,
+      "undoAvailable": true,
+      "undoLength": 24000000,
+      "undoPrefix": "0123456789 abcdef 中文 😀\n01",
+      "undoPreserved": true
+    },
+    {
+      "bytes": 9999995,
+      "decodeAndModelMs": 49.55101013183594,
+      "editedLength": 9999996,
+      "editedPrefix": "Xabcdef0123456789 abcdef0",
+      "editToDisplayMs": 114.80998992919922,
+      "name": "10MB-single",
+      "openToDisplayMs": 148.69093894958496,
+      "rssAfterMB": 377.3125,
+      "rssBeforeMB": 389.28125,
+      "undoAvailable": true,
+      "undoLength": 9999995,
+      "undoPrefix": "abcdef0123456789 abcdef01",
+      "undoPreserved": true
+    }
+  ],
+  "pid": 47569,
+  "results": [
+    {
+      "detail": "",
+      "name": "native-plain-edit",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-plain-undo-clean",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-plain-redo",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-plain-save-reopen",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-plain-gutter",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-markdown-edit",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-markdown-undo-clean",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-markdown-redo",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-markdown-save-reopen",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-markdown-gutter",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-json-edit",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-json-undo-clean",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-json-redo",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-json-save-reopen",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-json-gutter",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-yaml-edit",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-yaml-undo-clean",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-yaml-redo",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-yaml-save-reopen",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-yaml-gutter",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-marked-text-start",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-marked-text-commit",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "tab-transfer-identity",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "tab-transfer-undo",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "sidebar-window-state",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "second-tab-hit",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "move-1-to-1",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "move-1-to-1-undo",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "move-1-to-2",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "move-1-to-2-undo",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "move-2-to-1",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "move-2-to-1-undo",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "move-2-to-2",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "move-2-to-2-undo",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "markdown-default-preview",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "offline-preview-ready",
+      "passed": true
+    },
+    {
+      "detail": "{\"mermaid\":1,\"math\":2,\"table\":1,\"unsafe\":false,\"scripts\":0,\"remote\":0,\"errors\":\"\",\"svgLabels\":true,\"mathLayout\":14,\"highlight\":1}",
+      "name": "mermaid-offline",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "math-offline",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "table-and-code-highlight",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "html-sanitized-and-remote-disabled",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "preview-copy-strong",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "preview-copy-a",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "preview-copy-li",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "preview-copy-blockquote",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "preview-copy-pre",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "preview-copy-table",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "preview-copy-.mermaid",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "preview-copy-.math",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "preview-copy-.math-unit",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "preview-copy-section em",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "preview-copy-all-crlf",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "preview-exact-literal-copy",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "markdown-memory-latest",
+      "passed": true
+    },
+    {
+      "detail": "types: [__C.NSPasteboardType(_rawValue: public.utf8-plain-text), __C.NSPasteboardType(_rawValue: NSStringPboardType)]",
+      "name": "copy-whole-source-plain-only",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "external-clean-reload",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "external-dirty-conflict",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "performance-1-multiline",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "performance-10-multiline",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "performance-30-multiline",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "performance-10-single",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "paged-unicode-cross-page-undo",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "paged-unicode-redo",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "paged-full-copy",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "single-instance-concurrent-handoff",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "single-instance-different-install-path",
+      "passed": true
+    }
+  ],
+  "status": "complete",
+  "exitCode": 0,
+  "normalExit": true
+}

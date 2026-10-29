@@ -1,0 +1,12 @@
+import MarkdownIt from 'markdown-it';
+import katex from 'katex';
+import DOMPurify from 'dompurify';
+import hljs from 'highlight.js/lib/core';
+import json from 'highlight.js/lib/languages/json';
+import yaml from 'highlight.js/lib/languages/yaml';
+import swift from 'highlight.js/lib/languages/swift';
+import javascript from 'highlight.js/lib/languages/javascript';
+import python from 'highlight.js/lib/languages/python';
+import bash from 'highlight.js/lib/languages/bash';
+for(const [n,l] of Object.entries({json,yaml,swift,javascript,python,bash})) hljs.registerLanguage(n,l);
+window.TinyLib = {MarkdownIt,mermaid:globalThis.mermaid,katex,DOMPurify,hljs};

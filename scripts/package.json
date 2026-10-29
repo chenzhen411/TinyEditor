@@ -1,0 +1,1 @@
+{"private":true,"description":"Build-time only; TinyEditor runs fully offline","dependencies":{"markdown-it":"15.0.3","@mermaid-js/tiny":"12.2.0","katex":"0.19.1","dompurify":"3.4.17","highlight.js":"11.12.0"},"devDependencies":{"esbuild":"0.28.2"}}
