@@ -1,0 +1,11 @@
+{
+  "type": "native CUA control and screenshot observations",
+  "installed": "/Applications/TinyEditor.app",
+  "version": "1.0.3",
+  "build": "4",
+  "singleMainProcess": true,
+  "sidebarOpenAXDivider": 220,
+  "sidebarClosedAXDivider": 0,
+  "collapsedResidualDividerVisible": false,
+  "finalWindowSidebarOpen": true
+}

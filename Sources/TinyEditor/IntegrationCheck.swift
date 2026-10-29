@@ -383,8 +383,40 @@ enum IntegrationCheck {
     check(
       "sidebar-native-button-opens",
       source.sidebarVisible && !source.sidebar.isHidden && source.sidebar.frame.width >= 170)
+    let root = source.window!.contentView!
+    func alignedDocumentHeader() -> Bool {
+      let tabs = source.tabStrip.convert(source.tabStrip.bounds, to: root)
+      let body = source.host.convert(source.host.bounds, to: root)
+      let side = source.sidebar.convert(source.sidebar.bounds, to: root)
+      return abs(tabs.minX - body.minX) < 1 && abs(tabs.width - body.width) < 1
+        && abs(tabs.minY - body.maxY) < 1
+        && (source.sidebarVisible
+          ? (tabs.minX >= side.maxX && abs(tabs.maxY - side.maxY) < 1)
+          : (abs(tabs.minX - root.bounds.minX) < 1 && abs(tabs.width - root.bounds.width) < 1))
+    }
+    source.window?.contentView?.layoutSubtreeIfNeeded()
+    check("sidebar-tabs-align-with-document", alignedDocumentHeader())
+    source.split.setPosition(300, ofDividerAt: 0)
+    source.layoutContent()
+    source.tabStrip.layoutSubtreeIfNeeded()
+    check("sidebar-resize-moves-tabs-with-body", alignedDocumentHeader() && source.sidebarWidth >= 299)
+    let extra = EditorDocument()
+    source.add(extra)
+    source.tabStrip.layoutSubtreeIfNeeded()
+    let secondCell = source.tabStrip.cells[1]
+    let tabPoint = secondCell.convert(NSPoint(x: secondCell.bounds.midX, y: secondCell.bounds.midY), to: nil)
+    let converted = source.tabStrip.convert(tabPoint, from: nil)
+    check("sidebar-offset-tab-drop-index", source.tabStrip.insertionIndex(at: converted) == 2)
+    if let frame = source.window?.contentView?.superview {
+      let p = secondCell.convert(NSPoint(x: secondCell.bounds.midX, y: secondCell.bounds.midY), to: frame)
+      check("sidebar-offset-second-tab-hit", frame.hitTest(p) === secondCell)
+    }
+    source.remove(extra)
     source.sidebarButton.performClick(nil)
     check("sidebar-native-button-closes", !source.sidebarVisible && source.sidebar.isHidden)
+    check("collapsed-tabs-align-with-document", alignedDocumentHeader())
+    check("collapsed-sidebar-has-no-divider-offset", source.sidebar.frame.width < 1)
+    check("collapsed-sidebar-divider-transparent", source.split.dividerColor.alphaComponent == 0)
     let blank = EditorDocument()
     source.add(blank)
     source.tabStrip.layoutSubtreeIfNeeded()

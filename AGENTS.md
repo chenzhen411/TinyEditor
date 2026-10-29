@@ -65,3 +65,9 @@ Initial environment: macOS 27.2, arm64; Swift 6.4 CLI tools, no full Xcode requi
 - Driver must be built BEFORE permission grant and registered from a persistent project output location. /tmp was not resolvable by TCC; ad hoc rebuild changed the signature and required removal/re-addition of the stale grant. Never change the driver binary mid-acceptance or edit TCC databases.
 - File Provider metadata settling can exceed five retries. Build allows twenty bounded retries, removing only generated app FinderInfo, then still requires strict verification.
 - Current evidence and scope: docs/DRAG-REGRESSION-1.0.2.md, real-drag-results.json and evidence/1.0.2-*.
+
+## 1.0.3 sidebar/document header alignment
+- TabStrip belongs to documentArea inside the right split pane. Split occupies all content below the toolbar; the sidebar includes the document header height. Body and status share the tab strip's width.
+- Collapse the hidden sidebar view to zero width, retain preferred sidebarWidth separately, invalidate split drawing and suppress hidden native divider painting/color. Hiding an arranged view alone leaves an old frame/divider on this macOS version.
+- 83 isolated integration checks pass with normal exit. New checks cover open/resize/collapse alignment, full collapsed width, second-tab native hitTest, window-to-strip insertion coordinates and hidden divider geometry/color. Real CUA clicks checked first/second tab switching and second-tab close with sidebar open.
+- Native drag source/token logic is unchanged. No CGEvent permission regrant or new full real drag matrix is claimed for 1.0.3. See docs/LAYOUT-1.0.3.md.

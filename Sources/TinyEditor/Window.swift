@@ -200,12 +200,21 @@ final class TabStrip: TabDropView {
   @objc func addTab() { owner?.add(EditorDocument()) }
 }
 
+final class SidebarSplitView: NSSplitView {
+  override var dividerColor: NSColor {
+    arrangedSubviews.first?.isHidden == true ? .clear : super.dividerColor
+  }
+  override func drawDivider(in rect: NSRect) {
+    if arrangedSubviews.first?.isHidden != true { super.drawDivider(in: rect) }
+  }
+}
+
 final class EditorWindowController: NSWindowController, NSWindowDelegate, NSToolbarDelegate,
   NSTableViewDataSource, NSTableViewDelegate, NSSplitViewDelegate
 {
   var documents: [EditorDocument] = []
   var active: EditorDocument?
-  let tabStrip = TabStrip(), split = NSSplitView(), sidebar = NSScrollView(),
+  let tabStrip = TabStrip(), split = SidebarSplitView(), sidebar = NSScrollView(),
     recentTable = NSTableView(), documentArea = TabDropView(), host = TabDropView(),
     status = NSVisualEffectView(), statusText = NSTextField(labelWithString: "")
   let sidebarButton = NSButton(), formatPopup = NSPopUpButton(), zoomMinus = NSButton(),
@@ -247,7 +256,6 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     root.owner = self
     window.contentView = root
     tabStrip.owner = self
-    root.addSubview(tabStrip)
     root.addSubview(split)
     split.isVertical = true
     split.dividerStyle = .thin
@@ -272,6 +280,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     recentTable.doubleAction = #selector(openRecent)
     recentTable.action = #selector(openRecent)
     recentTable.columnAutoresizingStyle = .uniformColumnAutoresizingStyle
+    documentArea.addSubview(tabStrip)
     documentArea.addSubview(host)
     documentArea.addSubview(status)
     status.material = .underWindowBackground
@@ -307,15 +316,17 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     isLayingOut = true
     defer { isLayingOut = false }
     let top = window?.contentLayoutRect.maxY ?? root.bounds.height
-    tabStrip.frame = NSRect(x: 0, y: top - 28, width: root.bounds.width, height: 28)
-    split.frame = NSRect(x: 0, y: 0, width: root.bounds.width, height: max(0, top - 28))
+    split.frame = NSRect(x: 0, y: 0, width: root.bounds.width, height: max(0, top))
     if sidebarVisible {
       if abs(sidebar.frame.width - sidebarWidth) > 1 {
         split.setPosition(sidebarWidth, ofDividerAt: 0)
       }
     }
+    tabStrip.frame = NSRect(
+      x: 0, y: max(0, documentArea.bounds.height - 28),
+      width: documentArea.bounds.width, height: 28)
     host.frame = NSRect(
-      x: 0, y: 24, width: documentArea.bounds.width, height: max(0, documentArea.bounds.height - 24)
+      x: 0, y: 24, width: documentArea.bounds.width, height: max(0, documentArea.bounds.height - 52)
     )
     status.frame = NSRect(x: 0, y: 0, width: documentArea.bounds.width, height: 24)
     statusText.frame = NSRect(x: 10, y: 5, width: max(0, status.bounds.width - 20), height: 16)
@@ -452,7 +463,12 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     sidebarVisible.toggle()
     let preferredWidth = sidebarWidth
     sidebar.isHidden = !sidebarVisible
+    if !sidebarVisible {
+      // Hidden arranged views retain their old frame; AppKit can still draw that divider.
+      sidebar.setFrameSize(NSSize(width: 0, height: sidebar.frame.height))
+    }
     split.adjustSubviews()
+    split.needsDisplay = true
     sidebarWidth = preferredWidth
     layoutContent()
     window?.contentView?.needsLayout = true
@@ -505,6 +521,9 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
   }
   func splitView(_ splitView: NSSplitView, shouldAdjustSizeOfSubview view: NSView) -> Bool {
     view !== sidebar
+  }
+  func splitView(_ splitView: NSSplitView, shouldHideDividerAt dividerIndex: Int) -> Bool {
+    !sidebarVisible
   }
   func installDropOverlay() {
     guard dropOverlay == nil, let frame = window?.contentView?.superview else { return }

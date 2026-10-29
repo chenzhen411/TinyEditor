@@ -4,7 +4,7 @@
 
 验证分为自动数据检查、实际 AppKit/WebKit 集成检查、真实 GUI 操作、性能实测和未验证兼容范围。不存在“全部人工验收通过”的声明。
 
-当前版本 1.0.2 / build 3：76 项集成检查正常退出；完整单/多标签真实拖放矩阵与标签样式验收见 [1.0.2 回归记录](DRAG-REGRESSION-1.0.2.md) 和 real-drag-results.json。既有启动测量为历史数据，本轮性能以最新 integration-results.json 为准。
+当前版本 1.0.3 / build 4：83 项集成检查正常退出；侧边栏与标签栏布局见 [1.0.3 记录](LAYOUT-1.0.3.md)。此前完整单/多标签真实拖放矩阵见 [1.0.2 回归记录](DRAG-REGRESSION-1.0.2.md) 和 real-drag-results.json。既有启动测量为历史数据，本轮性能以最新 integration-results.json 为准。
 
 ## 自动证据
 
