@@ -86,8 +86,34 @@ final class DragCoordinator: NSObject {
   }
 }
 
-/// Register the WINDOW before a drag starts. This receives the private tab type over native
-/// editors, WKWebView and toolbar/titlebar alike, without placing an input-catching view on top.
+/// Forward authenticated private tab drops from native registered view regions to the window.
+/// Mouse hit testing is independent of drag registration; the frame overlay always returns nil.
+class TabDropView: NSView {
+  override init(frame frameRect: NSRect) {
+    super.init(frame: frameRect)
+    registerForDraggedTypes([tabDragType])
+  }
+  required init?(coder: NSCoder) { fatalError() }
+  private var destination: EditorWindow? { window as? EditorWindow }
+  override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
+    destination?.draggingEntered(sender) ?? []
+  }
+  override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation {
+    destination?.draggingUpdated(sender) ?? []
+  }
+  override func draggingExited(_ sender: NSDraggingInfo?) { destination?.draggingExited(sender) }
+  override func prepareForDragOperation(_ sender: NSDraggingInfo) -> Bool {
+    destination?.prepareForDragOperation(sender) ?? false
+  }
+  override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+    destination?.performDragOperation(sender) ?? false
+  }
+  override func concludeDragOperation(_ sender: NSDraggingInfo?) {
+    destination?.concludeDragOperation(sender)
+  }
+}
+
+/// The window receives titlebar/toolbar drops; registered content ancestors forward here too.
 final class EditorWindow: NSWindow, NSDraggingDestination {
   weak var editorOwner: EditorWindowController?
   func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
@@ -147,8 +173,8 @@ final class EditorWindow: NSWindow, NSDraggingDestination {
   }
 }
 
-/// A purely visual hint. Its hitTest is unconditional: stale drag state can never block controls.
-final class DropOverlay: NSView {
+/// Native drop region plus visual hint. Stale drag state can never block ordinary controls.
+final class DropOverlay: TabDropView {
   var hovering = false { didSet { needsDisplay = true } }
   override func hitTest(_ point: NSPoint) -> NSView? { nil }
   override func draw(_ rect: NSRect) {

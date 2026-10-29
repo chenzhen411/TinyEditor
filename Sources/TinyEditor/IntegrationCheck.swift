@@ -348,6 +348,9 @@ enum IntegrationCheck {
     let source = app.newWindow(with: moving)
     source.window?.contentView?.layoutSubtreeIfNeeded()
     source.tabStrip.layoutSubtreeIfNeeded()
+    check(
+      "drop-region-registered-before-session",
+      source.dropOverlay?.registeredDraggedTypes.contains(tabDragType) == true)
     weak var originalCell = source.tabStrip.cells.first
     guard !source.tabStrip.cells.isEmpty else {
       check("drag-source-fixture", false)
@@ -385,6 +388,13 @@ enum IntegrationCheck {
     let blank = EditorDocument()
     source.add(blank)
     source.tabStrip.layoutSubtreeIfNeeded()
+    check("new-active-tab-close-visible", source.tabStrip.cells.last?.closeButton.isHidden == false)
+    source.activate(moving)
+    check(
+      "tab-switch-refreshes-close-target",
+      source.tabStrip.cells.first?.closeButton.isHidden == false
+        && source.tabStrip.cells.last?.closeButton.isHidden == true)
+    source.activate(blank)
     source.tabStrip.cells.last?.closeButton.performClick(nil)
     check(
       "close-native-button-removes-only-tab",

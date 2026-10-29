@@ -1,0 +1,69 @@
+{
+  "dragActive" : false,
+  "event" : "drag-ended",
+  "time" : 1793247666.258702,
+  "windows" : [
+    {
+      "active" : "source.txt",
+      "documents" : [
+        {
+          "canRedo" : false,
+          "canUndo" : false,
+          "dirty" : false,
+          "format" : "auto",
+          "id" : "09FA5EB0-809F-4E67-8C09-9BB7F14C88B6",
+          "name" : "未命名.txt",
+          "preview" : false,
+          "selection" : "{0, 0}",
+          "text" : ""
+        },
+        {
+          "canRedo" : false,
+          "canUndo" : true,
+          "dirty" : true,
+          "format" : "auto",
+          "id" : "4140DF4E-A92B-4B73-B8C8-714D77C1073B",
+          "name" : "source.txt",
+          "preview" : false,
+          "selection" : "{33, 0}",
+          "text" : "原生编辑验证\n中文、Unicode 😀\n第三行\n真实跨窗 😀\n"
+        }
+      ],
+      "frame" : "{{865, 130}, {825, 660}}",
+      "number" : 2242,
+      "sidebar" : false,
+      "sidebarWidth" : 0
+    },
+    {
+      "active" : "未命名.txt",
+      "documents" : [
+        {
+          "canRedo" : false,
+          "canUndo" : false,
+          "dirty" : false,
+          "format" : "auto",
+          "id" : "FD46DE6C-2471-49B7-BBC4-B9E232FA8086",
+          "name" : "preview.md",
+          "preview" : true,
+          "selection" : "{0, 0}",
+          "text" : "# TinyEditor\n\n轻量、原生、离线。\n\n**Markdown 原文复制** 与 [本地文档](source.txt)。\n\n- [x] 原生编辑\n- [x] 离线预览\n\n```mermaid\ngraph LR\n A[原文] --> B[预览]\n```\n\n公式：$E=mc^2$\n"
+        },
+        {
+          "canRedo" : false,
+          "canUndo" : false,
+          "dirty" : false,
+          "format" : "auto",
+          "id" : "6CA8D85C-2723-4A4E-A7A4-A38A2495DB17",
+          "name" : "未命名.txt",
+          "preview" : false,
+          "selection" : "{0, 0}",
+          "text" : ""
+        }
+      ],
+      "frame" : "{{160, 252}, {1000, 720}}",
+      "number" : 2272,
+      "sidebar" : false,
+      "sidebarWidth" : 0
+    }
+  ]
+}

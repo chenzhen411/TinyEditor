@@ -1,0 +1,307 @@
+{
+  "input": "Real CGEvent input from user-authorized temporary driver; AppKit callbacks and fixture snapshots",
+  "passed": true,
+  "checks": 75,
+  "results": [
+    {
+      "name": "01-preview: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "01-preview: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "01-preview: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "02-detach: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "02-detach: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "02-detach: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "03-single-to-multi-editor: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "03-single-to-multi-editor: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "03-single-to-multi-editor: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "04-preview-detach: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "04-preview-detach: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "04-preview-detach: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "05-multi-to-single-preview: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "05-multi-to-single-preview: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "05-multi-to-single-preview: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "06-editor-repeat: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "06-editor-repeat: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "06-editor-repeat: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "08-multi-to-multi: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "08-multi-to-multi: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "08-multi-to-multi: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "09-detach-third: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "09-detach-third: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "09-detach-third: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "10-toolbar: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "10-toolbar: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "10-toolbar: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "11-sidebar-before: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "11-sidebar-before: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "11-sidebar-before: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "12-sidebar-drop: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "12-sidebar-drop: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "12-sidebar-drop: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "13-status-drop: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "13-status-drop: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "13-status-drop: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "14-escape-outside: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "14-escape-outside: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "14-escape-outside: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "15-escape-preview-before: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "15-escape-preview-before: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "15-escape-preview-before: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "16-escape-preview: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "16-escape-preview: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "16-escape-preview: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "17-reorder: source identity/text/dirty/undo/format/selection",
+      "passed": true
+    },
+    {
+      "name": "17-reorder: markdown source and preview context",
+      "passed": true
+    },
+    {
+      "name": "17-reorder: tracking cleaned",
+      "passed": true
+    },
+    {
+      "name": "single to single over preview",
+      "passed": true
+    },
+    {
+      "name": "single to multi over editor",
+      "passed": true
+    },
+    {
+      "name": "multi to single over preview",
+      "passed": true
+    },
+    {
+      "name": "multi to multi",
+      "passed": true
+    },
+    {
+      "name": "second-tab detach",
+      "passed": true
+    },
+    {
+      "name": "third-tab detach",
+      "passed": true
+    },
+    {
+      "name": "sidebar target received",
+      "passed": true
+    },
+    {
+      "name": "status target received independently",
+      "passed": true
+    },
+    {
+      "name": "escape outside preserves complete window state",
+      "passed": true
+    },
+    {
+      "name": "escape over preview preserves complete window state",
+      "passed": true
+    },
+    {
+      "name": "tab reordered to first position",
+      "passed": true
+    },
+    {
+      "name": "AppKit accepted zone preview",
+      "passed": true
+    },
+    {
+      "name": "AppKit accepted zone editor",
+      "passed": true
+    },
+    {
+      "name": "AppKit accepted zone toolbar",
+      "passed": true
+    },
+    {
+      "name": "AppKit accepted zone sidebar",
+      "passed": true
+    },
+    {
+      "name": "AppKit accepted zone status",
+      "passed": true
+    },
+    {
+      "name": "AppKit accepted zone tabs",
+      "passed": true
+    },
+    {
+      "name": "two native Escape endings",
+      "passed": true
+    },
+    {
+      "name": "final manual JSON overrides txt",
+      "passed": true
+    },
+    {
+      "name": "final preview drop preserves complete document",
+      "passed": true
+    },
+    {
+      "name": "real undo after transfer restores clean content",
+      "passed": true
+    },
+    {
+      "name": "real redo restores modified original",
+      "passed": true
+    },
+    {
+      "name": "third close removes exactly third ID",
+      "passed": true
+    },
+    {
+      "name": "second close cancellation preserves source",
+      "passed": true
+    },
+    {
+      "name": "final sidebar click opens",
+      "passed": true
+    },
+    {
+      "name": "final Escape preserves all state",
+      "passed": true
+    },
+    {
+      "name": "temporary driver access revoked",
+      "passed": true
+    }
+  ]
+}

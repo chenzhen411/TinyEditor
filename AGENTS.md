@@ -19,6 +19,7 @@ Document.swift: canonical NSTextStorage, undo, I/O and conflict protection.
 Editor.swift: TextKit 1 editor, visible-line gutter and lexical highlighter.
 Preview.swift + Resources/Preview: WKWebView, source-mapped Markdown, offline render/security.
 Window.swift: tabs, drag/drop, sidebar, toolbar and status.
+Drag.swift: authenticated native drag forwarding and the transparent registered frame region.
 Application.swift / Instance.swift: menus, file lifecycle, single instance IPC.
 
 ## Validation policy
@@ -28,7 +29,7 @@ Record actual automatic, mouse/keyboard and performance results separately in do
 Initial environment: macOS 27.2, arm64; Swift 6.4 CLI tools, no full Xcode required. Deployment target 13.0. Ad hoc signing if Developer ID unavailable. Initial repository empty, GitHub private chenzhen411/TinyEditor. Implementation and validation in progress.
 
 
-## Final local validation (2026-10-29)
+## 1.0.0 local validation history (2026-10-29)
 - Build: `./scripts/build.sh`, arm64, minos 13.0, ad hoc; no Developer ID/notarization.
 - Core: 9 cases, 3,061 assertions pass. Integration: 65 checks pass, normalExit=true / exitCode=0. Distribution ZIP and extracted strict signature pass; resource links complete.
 - Fresh blank launch: 785 / 291 / 273 ms observed spawn-to-ready, caches NOT purged, main RSS ~101 MiB. Markdown helper cost is separately recorded.
@@ -39,7 +40,7 @@ Initial environment: macOS 27.2, arm64; Swift 6.4 CLI tools, no full Xcode requi
 - Final evidence: docs/VALIDATION.md, GUI-VALIDATION.md and JSON reports. Do not upgrade “implemented” or programmatic move checks into claims that all mouse drag destinations passed.
 
 ## Remaining compatibility / verification scope
-- Full real mouse cross-window drop matrix, drag-out/reorder and fast switch video remain unverified due CUA destination coordinate failures. Native drag begins and Escape cancellation were observed.
+- Real cross-window combinations, all content/toolbar drop regions, drag-out/reorder and Escape passed in 1.0.2 using explicitly authorized CGEvent input. High-frame-rate fast-switch video remains unverified.
 - Real Chinese IME candidate UI pending; NSTextInputClient marked-text/commit and emoji across page boundaries pass.
 - macOS 13–26, Intel/Universal, multi-MB Markdown rendering, sidebar physical resize/scroll preservation require additional hardware/manual validation.
 - Long-line projection limits continuous mouse selection to the visible page. Full-source copy/save/find/replace and cross-page undo are implemented.
@@ -54,3 +55,13 @@ Initial environment: macOS 27.2, arm64; Swift 6.4 CLI tools, no full Xcode requi
 - 73 integration checks pass with normal process exit; 3,061 core assertions pass. 1.0.1 build 2 ZIP/signature/resources verified.
 - Real CUA coordinate clicks passed close second tab, sidebar open/close, dirty close cancellation, and controls after Escape. Full native cross-window release/detach still pending; CUA sends begin but no moved/destination/end until Escape. User CGEvent authorization requested asynchronously, NOT received and NOT assumed.
 - Evidence: docs/DRAG-REGRESSION-1.0.1.md and docs/evidence/1.0.1-*.
+
+## 1.0.2 real interaction acceptance
+- Preinstall DropOverlay as a registered native drag destination on the window frame before tracking starts. Window-only or ancestor-only registration did not receive WebKit body drops in real tests. Its hitTest ALWAYS returns nil, including during drag; registering a drag region does not require capturing ordinary mouse input.
+- Use one forwarding implementation for registered content/frame regions and the native window. Retain private nonce/source-object validation and source-cell lifetime protection.
+- Flat tabs use subtle system backgrounds, short separators, a small close symbol and medium active title. No rounded outline. Refresh tab visuals/close visibility immediately when active changes; do not rely on later hover or edits.
+- 76 integration checks pass, normalExit=true/exitCode=0. Core remains 9 cases / 3,061 passing assertions. 75 recorded real-input evidence checks pass, including all four single/multi combinations, preview/editor/toolbar/sidebar/status/tabs, second/third detach, reorder, Escape inside/outside, real undo/redo, manual JSON and exact third close.
+- User explicitly authorized a separate temporary InputCheck driver and broad OS permission for acceptance only. It is outside the shipped app/ZIP. Permission was disabled after acceptance; both AXIsProcessTrusted and CGPreflightPostEventAccess return false. Do not regrant without authorization.
+- Driver must be built BEFORE permission grant and registered from a persistent project output location. /tmp was not resolvable by TCC; ad hoc rebuild changed the signature and required removal/re-addition of the stale grant. Never change the driver binary mid-acceptance or edit TCC databases.
+- File Provider metadata settling can exceed five retries. Build allows twenty bounded retries, removing only generated app FinderInfo, then still requires strict verification.
+- Current evidence and scope: docs/DRAG-REGRESSION-1.0.2.md, real-drag-results.json and evidence/1.0.2-*.

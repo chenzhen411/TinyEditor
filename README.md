@@ -1,6 +1,6 @@
 # TinyEditor
 
-面向本地文本文件的轻量原生 macOS 编辑器。当前版本 **1.0.1**，修复关闭标签和侧边栏鼠标操作。应用名 **TinyEditor**，无空格。最低 macOS 13；本次构建为 **Apple Silicon / arm64**。
+面向本地文本文件的轻量原生 macOS 编辑器。当前版本 **1.0.2**：简洁平直标签，修复关闭与侧边栏操作，完成跨窗口真实拖放验收。应用名 **TinyEditor**，无空格。最低 macOS 13；本次构建为 **Apple Silicon / arm64**。
 
 - TXT、Markdown、JSON、YAML；标题栏手动选择格式并按文件路径记忆。
 - AppKit 原生纯文本编辑、撤销/重做、查找/替换、逻辑行号与自动换行。
@@ -61,6 +61,8 @@ python3 scripts/verify-distribution.py
 集成检查将创建隔离测试窗口，完成后检查正常退出。测试前先正常退出当前 TinyEditor，保护未保存内容；整个过程不改变 bundle ID。核心检查无需完整 Xcode；另保留 `Tests/TinyEditorTests` 供有 XCTest 的完整 Xcode 环境运行。
 
 自动状态检查、真实 GUI 操作、性能口径和未验证范围详见 [验证记录](docs/VALIDATION.md)，架构见 [ARCHITECTURE.md](docs/ARCHITECTURE.md)。不要把自动文档移动检查当作全部鼠标拖放组合已验收。
+
+1.0.2 的四种跨窗口组合、正文/预览/工具栏/侧边栏/状态栏放下、拖出拆窗、重排及 Escape 已使用用户授权的真实系统事件验收，见 [交互回归记录](docs/DRAG-REGRESSION-1.0.2.md)。独立输入测试驱动不随应用分发，临时系统权限已撤销。
 
 ## 快捷键
 

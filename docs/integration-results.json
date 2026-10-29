@@ -1,19 +1,19 @@
 {
   "architecture": "arm64",
-  "date": "2026-10-29T03:07:48Z",
+  "date": "2026-10-29T04:29:18Z",
   "os": "版本27.2（版号26B123）",
   "passed": true,
   "performance": [
     {
       "bytes": 999990,
-      "decodeAndModelMs": 30.968070030212402,
+      "decodeAndModelMs": 31.76403045654297,
       "editedLength": 799993,
       "editedPrefix": "X0123456789 abcdef 中文 😀\n0",
-      "editToDisplayMs": 14.951944351196289,
+      "editToDisplayMs": 12.753009796142578,
       "name": "1MB-multiline",
-      "openToDisplayMs": 144.88708972930908,
-      "rssAfterMB": 185.265625,
-      "rssBeforeMB": 157.6875,
+      "openToDisplayMs": 155.9300422668457,
+      "rssAfterMB": 162.109375,
+      "rssBeforeMB": 133.9375,
       "undoAvailable": true,
       "undoLength": 799992,
       "undoPrefix": "0123456789 abcdef 中文 😀\n01",
@@ -21,14 +21,14 @@
     },
     {
       "bytes": 9999990,
-      "decodeAndModelMs": 320.27602195739746,
+      "decodeAndModelMs": 305.4701089859009,
       "editedLength": 7999993,
       "editedPrefix": "X0123456789 abcdef 中文 😀\n0",
-      "editToDisplayMs": 15.101075172424316,
+      "editToDisplayMs": 14.477014541625977,
       "name": "10MB-multiline",
-      "openToDisplayMs": 426.5260696411133,
-      "rssAfterMB": 250.4375,
-      "rssBeforeMB": 205.71875,
+      "openToDisplayMs": 424.64005947113037,
+      "rssAfterMB": 230.59375,
+      "rssBeforeMB": 181.78125,
       "undoAvailable": true,
       "undoLength": 7999992,
       "undoPrefix": "0123456789 abcdef 中文 😀\n01",
@@ -36,14 +36,14 @@
     },
     {
       "bytes": 30000000,
-      "decodeAndModelMs": 890.7010555267334,
+      "decodeAndModelMs": 915.9709215164185,
       "editedLength": 24000001,
       "editedPrefix": "X0123456789 abcdef 中文 😀\n0",
-      "editToDisplayMs": 17.61007308959961,
+      "editToDisplayMs": 16.188979148864746,
       "name": "30MB-multiline",
-      "openToDisplayMs": 1011.6850137710571,
-      "rssAfterMB": 374.515625,
-      "rssBeforeMB": 321.890625,
+      "openToDisplayMs": 1053.330898284912,
+      "rssAfterMB": 304.328125,
+      "rssBeforeMB": 297.5625,
       "undoAvailable": true,
       "undoLength": 24000000,
       "undoPrefix": "0123456789 abcdef 中文 😀\n01",
@@ -51,21 +51,21 @@
     },
     {
       "bytes": 9999995,
-      "decodeAndModelMs": 52.760958671569824,
+      "decodeAndModelMs": 50.022006034851074,
       "editedLength": 9999996,
       "editedPrefix": "Xabcdef0123456789 abcdef0",
-      "editToDisplayMs": 114.41898345947266,
+      "editToDisplayMs": 116.28103256225586,
       "name": "10MB-single",
-      "openToDisplayMs": 146.91698551177979,
-      "rssAfterMB": 437.3125,
-      "rssBeforeMB": 419.890625,
+      "openToDisplayMs": 164.36898708343506,
+      "rssAfterMB": 380.296875,
+      "rssBeforeMB": 363.828125,
       "undoAvailable": true,
       "undoLength": 9999995,
       "undoPrefix": "abcdef0123456789 abcdef01",
       "undoPreserved": true
     }
   ],
-  "pid": 50560,
+  "pid": 57628,
   "results": [
     {
       "detail": "",
@@ -239,6 +239,11 @@
     },
     {
       "detail": "",
+      "name": "drop-region-registered-before-session",
+      "passed": true
+    },
+    {
+      "detail": "",
       "name": "drag-source-retained-after-strip-rebuild",
       "passed": true
     },
@@ -260,6 +265,16 @@
     {
       "detail": "",
       "name": "sidebar-native-button-closes",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "new-active-tab-close-visible",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "tab-switch-refreshes-close-target",
       "passed": true
     },
     {

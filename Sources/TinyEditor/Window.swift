@@ -18,7 +18,8 @@ final class TabCell: NSView, NSDraggingSource {
     title.maximumNumberOfLines = 1
     title.isSelectable = false
     addSubview(title)
-    closeButton.image = NSImage(systemSymbolName: "xmark", accessibilityDescription: "关闭标签")
+    closeButton.image = NSImage(systemSymbolName: "xmark", accessibilityDescription: "关闭标签")?
+      .withSymbolConfiguration(.init(pointSize: 9, weight: .medium))
     closeButton.imageScaling = .scaleProportionallyDown
     closeButton.isBordered = false
     closeButton.target = self
@@ -46,16 +47,25 @@ final class TabCell: NSView, NSDraggingSource {
     title.frame = NSRect(x: 24, y: 6, width: max(0, bounds.width - 48), height: 18)
   }
   func refresh() {
+    let selected = owner?.active === document
     title.stringValue = (document.isDirty ? "• " : "") + document.name
+    title.textColor = selected ? .labelColor : .secondaryLabelColor
+    title.font = .systemFont(ofSize: 12, weight: selected ? .medium : .regular)
+    closeButton.contentTintColor = .secondaryLabelColor
     toolTip = document.url?.path ?? document.name
     closeButton.isHidden = !(hovering || owner?.active === document)
     needsDisplay = true
   }
   override func draw(_ rect: NSRect) {
-    (owner?.active === document
-      ? NSColor.controlBackgroundColor : NSColor.windowBackgroundColor.withAlphaComponent(0.55))
-      .setFill()
-    NSBezierPath(roundedRect: bounds.insetBy(dx: 1, dy: 1), xRadius: 5, yRadius: 5).fill()
+    let selected = owner?.active === document
+    if selected || hovering {
+      NSColor.textBackgroundColor.withAlphaComponent(selected ? 1 : 0.5).setFill()
+      bounds.fill()
+    }
+    if !selected {
+      NSColor.separatorColor.withAlphaComponent(0.5).setFill()
+      NSRect(x: bounds.maxX - 0.5, y: 7, width: 0.5, height: max(0, bounds.height - 14)).fill()
+    }
   }
   override func updateTrackingAreas() {
     super.updateTrackingAreas()
@@ -133,7 +143,7 @@ final class TabCell: NSView, NSDraggingSource {
   @objc func menuRename(_ sender: Any?) { owner?.rename(document) }
   @objc func menuCloseOthers(_ sender: Any?) { owner?.closeOthers(keeping: document) }
 }
-final class TabStrip: NSView {
+final class TabStrip: TabDropView {
   weak var owner: EditorWindowController?
   let scroll = NSScrollView(), content = NSView(), addButton = NSButton()
   var cells: [TabCell] = []
@@ -153,6 +163,13 @@ final class TabStrip: NSView {
   }
   required init?(coder: NSCoder) { fatalError() }
   override var isFlipped: Bool { true }
+  override func draw(_ dirtyRect: NSRect) {
+    (NSColor.windowBackgroundColor.blended(withFraction: 0.06, of: .labelColor)
+      ?? NSColor.windowBackgroundColor).setFill()
+    bounds.fill()
+    NSColor.separatorColor.withAlphaComponent(0.4).setFill()
+    NSRect(x: 0, y: bounds.maxY - 0.5, width: bounds.width, height: 0.5).fill()
+  }
   func rebuild() {
     cells.forEach { $0.removeFromSuperview() }
     cells = (owner?.documents ?? []).map { TabCell(document: $0, owner: owner!) }
@@ -189,7 +206,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
   var documents: [EditorDocument] = []
   var active: EditorDocument?
   let tabStrip = TabStrip(), split = NSSplitView(), sidebar = NSScrollView(),
-    recentTable = NSTableView(), documentArea = NSView(), host = NSView(),
+    recentTable = NSTableView(), documentArea = TabDropView(), host = TabDropView(),
     status = NSVisualEffectView(), statusText = NSTextField(labelWithString: "")
   let sidebarButton = NSButton(), formatPopup = NSPopUpButton(), zoomMinus = NSButton(),
     zoomReset = NSButton(), zoomPlus = NSButton(),
@@ -272,6 +289,9 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     toolbar.sizeMode = .small
     toolbar.allowsUserCustomization = false
     window.toolbar = toolbar
+    // Register the transparent native drop destination before AppKit snapshots drag regions.
+    // Its ordinary mouse hitTest always returns nil, including while a tab is being dragged.
+    installDropOverlay()
     NotificationCenter.default.addObserver(
       self, selector: #selector(documentChanged(_:)), name: .documentChanged, object: nil)
     NotificationCenter.default.addObserver(
@@ -314,6 +334,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
       old.preview?.rememberScroll({ old.schedulePreviewRelease() })
     }
     active = document
+    tabStrip.refresh()
     // Insert and size the prepared new view before detaching the old one.
     let view: NSView =
       document.previewing && document.resolvedFormat == .markdown
@@ -641,7 +662,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     return item
   }
 }
-final class LayoutView: NSView {
+final class LayoutView: TabDropView {
   weak var owner: EditorWindowController?
   override func layout() {
     super.layout()

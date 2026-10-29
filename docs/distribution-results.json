@@ -1,21 +1,21 @@
 {
-  "version": "1.0.1",
-  "build": "2",
+  "version": "1.0.2",
+  "build": "3",
   "architecture": "arm64",
   "minimumSystemVerified": "13.0",
   "signature": "ad hoc",
   "notarized": false,
   "zipIntegrity": true,
-  "zipSHA256": "d6b27fbc8cb3d48b3569579b54e6406bbd826199f4c143a2b361f1b65fca2dbc",
-  "zipBytes": 2467688,
-  "appFileBytes": 5716985,
+  "zipSHA256": "73041c636779fedfe73f0249f2d11bc76af6f94d9595ce4b6b4eb47c9f6863b6",
+  "zipBytes": 2471189,
+  "appFileBytes": 5737401,
   "resourceLinksComplete": true,
-  "codeSignatureVerification": "/tmp/TinyEditor-zip-5sy78xrp/TinyEditor.app: valid on disk\n/tmp/TinyEditor-zip-5sy78xrp/TinyEditor.app: satisfies its Designated Requirement",
-  "codeSignatureIdentity": "Executable=/private/tmp/TinyEditor-zip-5sy78xrp/TinyEditor.app/Contents/MacOS/TinyEditor\nIdentifier=top.moriarty.TinyEditor\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=1936 flags=0x2(adhoc) hashes=54+3 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1769472\nHash type=sha256 size=32\nCandidateCDHash sha256=26d51ff0d4e016cb58a489f9db852dafd32a8e68\nCandidateCDHashFull sha256=26d51ff0d4e016cb58a489f9db852dafd32a8e685f7ce6d20a10069a1986a90e\nHash choices=sha256\nCMSDigest=26d51ff0d4e016cb58a489f9db852dafd32a8e685f7ce6d20a10069a1986a90e\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=458752\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=26d51ff0d4e016cb58a489f9db852dafd32a8e68\nSignature=adhoc\nInfo.plist entries=17\nTeamIdentifier=not set\nSealed Resources version=2 rules=13 files=68\nInternal requirements count=0 size=12\nTotal signatures=1\nChosen signature=1",
-  "buildVersion": "/tmp/TinyEditor-zip-5sy78xrp/TinyEditor.app/Contents/MacOS/TinyEditor:\nLoad command 11\n      cmd LC_BUILD_VERSION\n  cmdsize 32\n platform MACOS\n    minos 13.0\n      sdk 27.0\n   ntools 1\n     tool LD\n  version 27037.1",
+  "codeSignatureVerification": "/tmp/TinyEditor-zip-83pliecv/TinyEditor.app: valid on disk\n/tmp/TinyEditor-zip-83pliecv/TinyEditor.app: satisfies its Designated Requirement",
+  "codeSignatureIdentity": "Executable=/private/tmp/TinyEditor-zip-83pliecv/TinyEditor.app/Contents/MacOS/TinyEditor\nIdentifier=top.moriarty.TinyEditor\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=1968 flags=0x2(adhoc) hashes=55+3 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1769472\nHash type=sha256 size=32\nCandidateCDHash sha256=c0b1bcfd41c693370bcff1a8a8e5c4e65b3f7b1e\nCandidateCDHashFull sha256=c0b1bcfd41c693370bcff1a8a8e5c4e65b3f7b1e8f677489078c5d0d7e1687cf\nHash choices=sha256\nCMSDigest=c0b1bcfd41c693370bcff1a8a8e5c4e65b3f7b1e8f677489078c5d0d7e1687cf\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=475136\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=c0b1bcfd41c693370bcff1a8a8e5c4e65b3f7b1e\nSignature=adhoc\nInfo.plist entries=17\nTeamIdentifier=not set\nSealed Resources version=2 rules=13 files=68\nInternal requirements count=0 size=12\nTotal signatures=1\nChosen signature=1",
+  "buildVersion": "/tmp/TinyEditor-zip-83pliecv/TinyEditor.app/Contents/MacOS/TinyEditor:\nLoad command 11\n      cmd LC_BUILD_VERSION\n  cmdsize 32\n platform MACOS\n    minos 13.0\n      sdk 27.0\n   ntools 1\n     tool LD\n  version 27037.1",
   "files": {
-    "Contents/Info.plist": "34680a3f8778ba505cda3e4b9dd2219ab8a3dcc91f3c9a41dcf31cde30c86583",
-    "Contents/MacOS/TinyEditor": "8f9d210db49f557fd3b5b921168136428447e5ca4d2f2ed41053e6bc9663584c",
+    "Contents/Info.plist": "c3eb6f3849ea73df7d506a30effbc83a1ef185c5f4db8743e2e7ff5fb740970a",
+    "Contents/MacOS/TinyEditor": "31c1a9e1920739f797acd7f1bc35415a7577123f5a8584fd8fc211bfaa61c336",
     "Contents/Resources/Preview/fonts/KaTeX_AMS-Regular.ttf": "68534840bcfdd2bffb6f0e8deb48684dd01e7f04ea2813267577afb906de1d13",
     "Contents/Resources/Preview/fonts/KaTeX_AMS-Regular.woff": "30da91e84c893f875e252689faebdc590b2871145e8adc7f9a9d4dbd8ce0b251",
     "Contents/Resources/Preview/fonts/KaTeX_AMS-Regular.woff2": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
@@ -85,5 +85,6 @@
     "Contents/Resources/THIRD_PARTY_NOTICES.md": "472dc5e2e6af73400c1920009991a815ccfd1a1dfe9e8effb893163d67f04483",
     "Contents/Resources/TinyEditor.icns": "67590bff83d3b790890f65fa9f103a4770348922c7bd7d5f797ecc6e599e605f",
     "Contents/_CodeSignature/CodeResources": "6dc457f7a86d1877e90ab7db47f6cd5d4117103c8e1d3894bedeb615b487b867"
-  }
+  },
+  "inputDriverExcluded": true
 }
