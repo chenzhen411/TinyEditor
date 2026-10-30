@@ -1,0 +1,24 @@
+{
+  "version": "1.0.4",
+  "build": "5",
+  "kind": "CUA native screenshot/click observations plus installed version and process checks",
+  "time": "2026-10-30T11:35:20.983130+08:00",
+  "guiObservations": [
+    "Light and dark rounded active cards inspected in native screenshots",
+    "First and second tab selected via screenshot coordinates",
+    "220 pt sidebar moves tabs with body",
+    "Right close button removes only second tab",
+    "Sidebar collapse leaves no previous divider",
+    "Installed normal-mode app visually confirmed"
+  ],
+  "integrationChecks": 83,
+  "integrationPassed": true,
+  "fullRealDragMatrixRerun": false,
+  "inputDriverPermissionRegranted": false,
+  "installedStrictSignatureExitCode": 0,
+  "mainProcesses": [
+    "68036 /Applications/TinyEditor.app/Contents/MacOS/TinyEditor"
+  ],
+  "isolatedDataDirectory": "/tmp/TinyEditor-104-tabs",
+  "screenshots": "Reviewed inline in this Codex session; this JSON is an observation record, not stored screenshot pixels."
+}

@@ -4,6 +4,7 @@ final class TabCell: NSView, NSDraggingSource {
   weak var owner: EditorWindowController?
   let document: EditorDocument
   let title = NSTextField(labelWithString: "")
+  let icon = NSImageView()
   let closeButton = NSButton()
   var tracking: NSTrackingArea?
   var mouseOrigin = NSPoint.zero
@@ -13,13 +14,18 @@ final class TabCell: NSView, NSDraggingSource {
     self.owner = owner
     super.init(frame: .zero)
     title.font = .systemFont(ofSize: 12)
-    title.alignment = .center
+    title.alignment = .left
     title.lineBreakMode = .byTruncatingMiddle
     title.maximumNumberOfLines = 1
     title.isSelectable = false
     addSubview(title)
+    icon.image = NSImage(systemSymbolName: "doc.text", accessibilityDescription: nil)?
+      .withSymbolConfiguration(.init(pointSize: 13, weight: .regular))
+    icon.imageScaling = .scaleProportionallyDown
+    icon.setAccessibilityElement(false)
+    addSubview(icon)
     closeButton.image = NSImage(systemSymbolName: "xmark", accessibilityDescription: "关闭标签")?
-      .withSymbolConfiguration(.init(pointSize: 9, weight: .medium))
+      .withSymbolConfiguration(.init(pointSize: 10, weight: .regular))
     closeButton.imageScaling = .scaleProportionallyDown
     closeButton.isBordered = false
     closeButton.target = self
@@ -43,8 +49,10 @@ final class TabCell: NSView, NSDraggingSource {
   }
   override func layout() {
     super.layout()
-    closeButton.frame = NSRect(x: 5, y: 6, width: 16, height: 16)
-    title.frame = NSRect(x: 24, y: 6, width: max(0, bounds.width - 48), height: 18)
+    let centerY = bounds.midY
+    icon.frame = NSRect(x: 13, y: centerY - 7, width: 14, height: 14)
+    closeButton.frame = NSRect(x: bounds.width - 31, y: centerY - 12, width: 24, height: 24)
+    title.frame = NSRect(x: 34, y: centerY - 8, width: max(0, bounds.width - 70), height: 17)
   }
   func refresh() {
     let selected = owner?.active === document
@@ -52,19 +60,42 @@ final class TabCell: NSView, NSDraggingSource {
     title.textColor = selected ? .labelColor : .secondaryLabelColor
     title.font = .systemFont(ofSize: 12, weight: selected ? .medium : .regular)
     closeButton.contentTintColor = .secondaryLabelColor
+    icon.contentTintColor = selected ? .labelColor : .tertiaryLabelColor
     toolTip = document.url?.path ?? document.name
     closeButton.isHidden = !(hovering || owner?.active === document)
     needsDisplay = true
   }
   override func draw(_ rect: NSRect) {
     let selected = owner?.active === document
+    let pill = NSBezierPath(roundedRect: bounds.insetBy(dx: 1, dy: 3), xRadius: 8, yRadius: 8)
     if selected || hovering {
-      NSColor.textBackgroundColor.withAlphaComponent(selected ? 1 : 0.5).setFill()
-      bounds.fill()
+      let dark = effectiveAppearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua
+      let fill = dark
+        ? NSColor.windowBackgroundColor.blended(withFraction: selected ? 0.10 : 0.045, of: .labelColor)!
+        : NSColor.textBackgroundColor.withAlphaComponent(selected ? 1 : 0.45)
+      NSGraphicsContext.saveGraphicsState()
+      if selected {
+        let shadow = NSShadow()
+        shadow.shadowColor = NSColor.black.withAlphaComponent(dark ? 0.16 : 0.07)
+        shadow.shadowBlurRadius = 2
+        shadow.shadowOffset = NSSize(width: 0, height: -1)
+        shadow.set()
+      }
+      fill.setFill()
+      pill.fill()
+      NSGraphicsContext.restoreGraphicsState()
+      if selected {
+        NSColor.labelColor.withAlphaComponent(dark ? 0.07 : 0.055).setStroke()
+        pill.lineWidth = 0.5
+        pill.stroke()
+      }
     }
-    if !selected {
-      NSColor.separatorColor.withAlphaComponent(0.5).setFill()
-      NSRect(x: bounds.maxX - 0.5, y: 7, width: 0.5, height: max(0, bounds.height - 14)).fill()
+    let nextIsSelected = owner?.tabStrip.cells.first(where: {
+      abs($0.frame.minX - frame.maxX - TabStrip.gap) < 1
+    })?.document === owner?.active
+    if !selected && !hovering && !nextIsSelected {
+      NSColor.separatorColor.withAlphaComponent(0.45).setFill()
+      NSRect(x: bounds.maxX - 0.5, y: 11, width: 0.5, height: max(0, bounds.height - 22)).fill()
     }
   }
   override func updateTrackingAreas() {
@@ -144,6 +175,8 @@ final class TabCell: NSView, NSDraggingSource {
   @objc func menuCloseOthers(_ sender: Any?) { owner?.closeOthers(keeping: document) }
 }
 final class TabStrip: TabDropView {
+  static let height: CGFloat = 36
+  static let gap: CGFloat = 4
   weak var owner: EditorWindowController?
   let scroll = NSScrollView(), content = NSView(), addButton = NSButton()
   var cells: [TabCell] = []
@@ -154,7 +187,9 @@ final class TabStrip: TabDropView {
     scroll.drawsBackground = false
     scroll.horizontalScrollElasticity = .allowed
     addSubview(scroll)
-    addButton.image = NSImage(systemSymbolName: "plus", accessibilityDescription: "新建标签")
+    addButton.image = NSImage(systemSymbolName: "plus", accessibilityDescription: "新建标签")?
+      .withSymbolConfiguration(.init(pointSize: 16, weight: .regular))
+    addButton.contentTintColor = .secondaryLabelColor
     addButton.isBordered = false
     addButton.target = self
     addButton.action = #selector(addTab)
@@ -164,11 +199,9 @@ final class TabStrip: TabDropView {
   required init?(coder: NSCoder) { fatalError() }
   override var isFlipped: Bool { true }
   override func draw(_ dirtyRect: NSRect) {
-    (NSColor.windowBackgroundColor.blended(withFraction: 0.06, of: .labelColor)
+    (NSColor.windowBackgroundColor.blended(withFraction: 0.025, of: .labelColor)
       ?? NSColor.windowBackgroundColor).setFill()
     bounds.fill()
-    NSColor.separatorColor.withAlphaComponent(0.4).setFill()
-    NSRect(x: 0, y: bounds.maxY - 0.5, width: bounds.width, height: 0.5).fill()
   }
   func rebuild() {
     cells.forEach { $0.removeFromSuperview() }
@@ -179,13 +212,17 @@ final class TabStrip: TabDropView {
   func refresh() { cells.forEach { $0.refresh() } }
   override func layout() {
     super.layout()
-    scroll.frame = NSRect(x: 0, y: 0, width: max(0, bounds.width - 30), height: 28)
-    addButton.frame = NSRect(x: bounds.width - 29, y: 2, width: 26, height: 24)
-    let width = max(115, min(230, scroll.bounds.width / CGFloat(max(1, cells.count))))
+    let count = CGFloat(max(1, cells.count))
+    let available = max(0, bounds.width - 44)
+    let width = max(140, min(240, (available - Self.gap * (count - 1)) / count))
+    let tabsWidth = (width + Self.gap) * CGFloat(cells.count) - Self.gap
+    let visibleWidth = min(available, max(0, tabsWidth))
+    scroll.frame = NSRect(x: 6, y: 0, width: visibleWidth, height: Self.height)
+    addButton.frame = NSRect(x: scroll.frame.maxX + 4, y: 4, width: 28, height: 28)
     content.frame = NSRect(
-      x: 0, y: 0, width: max(scroll.bounds.width, width * CGFloat(cells.count)), height: 28)
+      x: 0, y: 0, width: max(visibleWidth, tabsWidth), height: Self.height)
     for (i, cell) in cells.enumerated() {
-      cell.frame = NSRect(x: CGFloat(i) * width, y: 0, width: width, height: 28)
+      cell.frame = NSRect(x: CGFloat(i) * (width + Self.gap), y: 0, width: width, height: Self.height)
     }
   }
   func insertionIndex(at point: NSPoint) -> Int {
@@ -323,10 +360,11 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
       }
     }
     tabStrip.frame = NSRect(
-      x: 0, y: max(0, documentArea.bounds.height - 28),
-      width: documentArea.bounds.width, height: 28)
+      x: 0, y: max(0, documentArea.bounds.height - TabStrip.height),
+      width: documentArea.bounds.width, height: TabStrip.height)
     host.frame = NSRect(
-      x: 0, y: 24, width: documentArea.bounds.width, height: max(0, documentArea.bounds.height - 52)
+      x: 0, y: 24, width: documentArea.bounds.width,
+      height: max(0, documentArea.bounds.height - 24 - TabStrip.height)
     )
     status.frame = NSRect(x: 0, y: 0, width: documentArea.bounds.width, height: 24)
     statusText.frame = NSRect(x: 10, y: 5, width: max(0, status.bounds.width - 20), height: 16)

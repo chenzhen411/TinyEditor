@@ -71,3 +71,9 @@ Initial environment: macOS 27.2, arm64; Swift 6.4 CLI tools, no full Xcode requi
 - Collapse the hidden sidebar view to zero width, retain preferred sidebarWidth separately, invalidate split drawing and suppress hidden native divider painting/color. Hiding an arranged view alone leaves an old frame/divider on this macOS version.
 - 83 isolated integration checks pass with normal exit. New checks cover open/resize/collapse alignment, full collapsed width, second-tab native hitTest, window-to-strip insertion coordinates and hidden divider geometry/color. Real CUA clicks checked first/second tab switching and second-tab close with sidebar open.
 - Native drag source/token logic is unchanged. No CGEvent permission regrant or new full real drag matrix is claimed for 1.0.3. See docs/LAYOUT-1.0.3.md.
+
+## 1.0.4 rounded tab cards
+- User's reference replaces the earlier flat-tab visual decision. Use 36 pt strip, 30 pt rounded active card (8 pt radius), left document icon/title and right 24 pt close hit area. New-tab button follows the visible tabs; overflow remains horizontally scrollable.
+- Preserve the right-pane sidebar alignment and existing native drag/token routing. Do not hardcode screenshot coordinates in event handlers.
+- 83 isolated integration checks pass with normal exit. Real CUA screenshots and clicks verified light/dark appearance, first/second tab switching, sidebar open/collapse and exact second-tab close. See docs/TABS-1.0.4.md.
+- No InputCheck permission regrant or full real drag matrix rerun in this visual update.

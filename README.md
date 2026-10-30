@@ -1,6 +1,6 @@
 # TinyEditor
 
-面向本地文本文件的轻量原生 macOS 编辑器。当前版本 **1.0.3**：标签栏随正文区域避让侧边栏，保留简洁平直标签与跨窗口拖放。应用名 **TinyEditor**，无空格。最低 macOS 13；本次构建为 **Apple Silicon / arm64**。
+面向本地文本文件的轻量原生 macOS 编辑器。当前版本 **1.0.4**：圆角活动标签、右侧关闭按钮与跟随的新建按钮，标签栏随正文区域避让侧边栏。应用名 **TinyEditor**，无空格。最低 macOS 13；本次构建为 **Apple Silicon / arm64**。
 
 - TXT、Markdown、JSON、YAML；标题栏手动选择格式并按文件路径记忆。
 - AppKit 原生纯文本编辑、撤销/重做、查找/替换、逻辑行号与自动换行。
@@ -89,3 +89,5 @@ python3 scripts/verify-distribution.py
 Mermaid tiny 官方精简版不包含 mindmap、architecture 及 Mermaid 内嵌 KaTeX；文档级数学公式由独立 KaTeX 支持。渲染失败时保留可复制的原文。JSON/YAML 是词法高亮，**不是完整语法检查**。
 
 本次实际运行环境为 macOS 27.2 arm64；macOS 13–26、Intel 和 Universal 尚未实机验收。没有自动设置为默认编辑器，也不清空用户偏好、最近记录、草稿或系统缓存。
+
+1.0.4 按参考图重做圆角标签，浅色/深色分别适配；真实点击与回归范围见 [标签样式记录](docs/TABS-1.0.4.md)。
