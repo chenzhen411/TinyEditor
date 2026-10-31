@@ -1,0 +1,17 @@
+{
+  "checked": "all locally reachable Git blobs across all refs",
+  "blobsChecked": 209,
+  "credentialFilePaths": [],
+  "credentialPatternMatches": [],
+  "limitation": "Targeted scan of common private-key and token formats; not a guarantee that every possible secret format is detectable.",
+  "date": "2026-10-31",
+  "repository": "https://github.com/chenzhen411/TinyEditor",
+  "visibility": "public",
+  "anonymousAccessVerified": true,
+  "release": "https://github.com/chenzhen411/TinyEditor/releases/tag/v1.0.4",
+  "releaseStatus": "prerelease",
+  "developerIDValidIdentities": 0,
+  "developerIDSigning": "not completed; no Apple Developer account or signing identity",
+  "notarization": "not completed",
+  "publishedBinaryChanged": false
+}

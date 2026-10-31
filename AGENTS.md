@@ -77,3 +77,8 @@ Initial environment: macOS 27.2, arm64; Swift 6.4 CLI tools, no full Xcode requi
 - Preserve the right-pane sidebar alignment and existing native drag/token routing. Do not hardcode screenshot coordinates in event handlers.
 - 83 isolated integration checks pass with normal exit. Real CUA screenshots and clicks verified light/dark appearance, first/second tab switching, sidebar open/collapse and exact second-tab close. See docs/TABS-1.0.4.md.
 - No InputCheck permission regrant or full real drag matrix rerun in this visual update.
+
+## Public repository / distribution signing (2026-10-31)
+- User explicitly requested public visibility; chenzhen411/TinyEditor is now public. Anonymous GitHub API access to repository and v1.0.4 release verified. Targeted scan of 209 reachable historical blobs found no common private-key/token patterns or credential file paths; scope recorded in docs/publication-results.json.
+- User confirmed no Apple Developer account. User/system keychain checks returned zero valid code signing identities. Developer ID signing and notarization could not be performed; v1.0.4 remains accurately labeled ad hoc and prerelease. No application binaries were changed.
+- Before a future formal release, obtain Developer ID Application certificate/private key and notarization authentication in local Keychain, enable hardened runtime and secure timestamp, require Accepted notarization, staple/validate and Gatekeeper acceptance, then rebuild/verify ZIP and publish. See docs/SIGNING.md. Never claim the current build.sh ad hoc output is formally signed.

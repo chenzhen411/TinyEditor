@@ -2,6 +2,8 @@
 
 面向本地文本文件的轻量原生 macOS 编辑器。当前版本 **1.0.4**：圆角活动标签、右侧关闭按钮与跟随的新建按钮，标签栏随正文区域避让侧边栏。应用名 **TinyEditor**，无空格。最低 macOS 13；本次构建为 **Apple Silicon / arm64**。
 
+仓库现已公开：[chenzhen411/TinyEditor](https://github.com/chenzhen411/TinyEditor)。现有 Release 为预发布包，采用 ad hoc 签名；Developer ID 正式签名与 Apple 公证尚未完成，所需条件见 [签名发行说明](docs/SIGNING.md)。
+
 - TXT、Markdown、JSON、YAML；标题栏手动选择格式并按文件路径记忆。
 - AppKit 原生纯文本编辑、撤销/重做、查找/替换、逻辑行号与自动换行。
 - 多窗口、多标签、标签重排/拆窗/合并、共享最近文件列表与独立窗口侧边栏。
