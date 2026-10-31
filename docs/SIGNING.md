@@ -22,6 +22,8 @@
 2. 严格核对签名、Developer ID 证书链、TeamIdentifier、runtime 标记和时间戳；运行隔离 AppKit/WebKit 回归，保护现有用户文档。
 3. 将 ZIP 通过 `xcrun notarytool submit` 提交 Apple，核实状态为 Accepted；失败时保留诊断记录，不能发布为已公证。
 4. 对应用执行 `xcrun stapler staple` 与 `xcrun stapler validate`；再次严格检查代码签名，并通过 `spctl --assess --type execute` 验证 Gatekeeper 接受。
-5. 对已附公证票据的应用重新生成 ZIP 和 SHA-256，解压验证后上传 GitHub Release，再改为正式发行。原有 ad hoc 包须继续保持准确说明。
+5. 对已附公证票据的应用生成 DMG 和 SHA-256，挂载及安装复制验证后上传 GitHub Release，再改为正式发行。原有 ad hoc 包须继续保持准确说明。
 
 以上是待执行流程，不是已完成的签名或公证证据。Apple 要求见 [公证前准备](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution)与[公证工作流](https://developer.apple.com/documentation/security/customizing-the-notarization-workflow)。
+
+2026-10-31 分发格式调整：当前公开下载改用 DMG，正式公证时仍可使用临时 ZIP 作为 Apple 提交载体，临时文件不作为 GitHub 分发附件。签名、公证状态不会因封装为 DMG 而改变。

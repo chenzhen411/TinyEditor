@@ -14,9 +14,50 @@
 
 ## 运行与安装
 
-从 [GitHub Releases](https://github.com/chenzhen411/TinyEditor/releases) 下载 `TinyEditor-macOS-arm64.zip`，解压后将 `TinyEditor.app` 放到“应用程序”，双击运行。项目内也提供 `artifacts/TinyEditor.app`。Finder 可用“打开方式”打开文本文件，也可将文件拖到 Dock 图标。
+从 [GitHub Releases](https://github.com/chenzhen411/TinyEditor/releases/tag/v1.0.4) 下载 `TinyEditor-macOS-arm64.dmg`，打开后将 `TinyEditor.app` 拖入 `Applications`。如已安装旧版，先保存文档并按 ⌘Q 正常退出。项目内也提供 `artifacts/TinyEditor.app`。Finder 可用“打开方式”打开文本文件，也可将文件拖到 Dock 图标。
 
 本次应用采用 **ad hoc 本地签名**，没有 Developer ID 签名及 Apple 公证。跨机器下载时 macOS 可能要求通过系统提供的打开流程确认。
+
+### 使用 curl 下载并安装
+
+以下命令适用于 Apple Silicon，安装至 `/Applications/TinyEditor.app`。如已有同名应用，先将其移动到用户目录的安装备份中，保留偏好、最近记录和恢复草稿。如果“应用程序”目录不可写，请使用上面的 Finder 拖入方式，由系统处理权限。
+
+```sh
+(
+  set -e
+  if [ "$(uname -m)" != arm64 ]; then
+    echo '此安装包适用于 Apple Silicon。' >&2
+    exit 1
+  fi
+  if pgrep -x TinyEditor >/dev/null; then
+    echo '请先保存文档并按 ⌘Q 退出 TinyEditor，再运行安装命令。' >&2
+    exit 1
+  fi
+  tinyeditor_tmp="$(mktemp -d)"
+  tinyeditor_url='https://github.com/chenzhen411/TinyEditor/releases/download/v1.0.4'
+  curl -fL --retry 3 "$tinyeditor_url/TinyEditor-macOS-arm64.dmg" -o "$tinyeditor_tmp/TinyEditor-macOS-arm64.dmg"
+  curl -fL --retry 3 "$tinyeditor_url/SHA256SUMS.txt" -o "$tinyeditor_tmp/SHA256SUMS.txt"
+  (cd "$tinyeditor_tmp" && shasum -a 256 -c SHA256SUMS.txt)
+  tinyeditor_mount="$tinyeditor_tmp/volume"
+  mkdir "$tinyeditor_mount"
+  hdiutil attach -readonly -nobrowse -mountpoint "$tinyeditor_mount" "$tinyeditor_tmp/TinyEditor-macOS-arm64.dmg"
+  trap 'hdiutil detach "$tinyeditor_mount" >/dev/null 2>&1 || true' EXIT
+  codesign --verify --deep --strict "$tinyeditor_mount/TinyEditor.app"
+  if [ -e /Applications/TinyEditor.app ]; then
+    tinyeditor_id="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' /Applications/TinyEditor.app/Contents/Info.plist)"
+    [ "$tinyeditor_id" = top.moriarty.TinyEditor ] || exit 1
+    tinyeditor_backup="$HOME/Library/Application Support/TinyEditor/InstallBackups/$(date +%Y%m%d-%H%M%S)-$$"
+    mkdir -p "$tinyeditor_backup"
+    mv /Applications/TinyEditor.app "$tinyeditor_backup/TinyEditor.app"
+    echo "旧版已备份至：$tinyeditor_backup/TinyEditor.app"
+  fi
+  ditto "$tinyeditor_mount/TinyEditor.app" /Applications/TinyEditor.app
+  codesign --verify --deep --strict /Applications/TinyEditor.app
+  open /Applications/TinyEditor.app
+)
+```
+
+下载文件保留在命令创建的临时目录；DMG 会自动推出。此流程不删除隔离标记，也不修改系统安全设置。
 
 ```sh
 open artifacts/TinyEditor.app
@@ -37,7 +78,7 @@ artifacts/TinyEditor.app/Contents/MacOS/TinyEditor --new-window
 ./scripts/build.sh
 ```
 
-输出 `artifacts/TinyEditor.app`、`TinyEditor-macOS-arm64.zip` 和 `SHA256SUMS.txt`。脚本使用当前机器架构，当前为 arm64；在本机验证 macOS 13 部署标记。先在 `/tmp` 本地目录打包并签名，避免文件提供程序附加的 Finder 元数据影响签名，再复制到项目。对受限执行环境需允许系统图标工具、签名和文件协调服务运行。
+输出 `artifacts/TinyEditor.app`、`TinyEditor-macOS-arm64.dmg` 和 `SHA256SUMS.txt`，不再生成 ZIP 分发包。脚本使用当前机器架构，当前为 arm64；在本机验证 macOS 13 部署标记。先在 `/tmp` 本地目录打包并签名，避免文件提供程序附加的 Finder 元数据影响签名，再复制到项目。对受限执行环境需允许系统图标工具、签名和磁盘映像服务运行。
 
 此机器只有 Command Line Tools。Swift 6.4 的默认构建后端在当前受限环境生成 dSYM 失败，因此脚本明确使用 SwiftPM native 后端；该选项已被此工具链标为 deprecated，未来工具链移除时需迁移构建入口。
 

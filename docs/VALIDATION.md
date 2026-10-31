@@ -12,7 +12,7 @@
 - `integration-results.json`：原生编辑/保存/撤销、源码模式、离线渲染、系统剪贴板、窗口间文档移动、超长行分页、组合文本、并发 IPC、不同安装路径。
 - `prototype-results.json`：第一阶段关键原型结果；后续以最终集成报告为准。
 - `launch-results.json`：新 GUI 进程启动、首次就绪、主进程 RSS 和新 WebKit 辅助进程。
-- `distribution-results.json`：发布架构、最低系统、签名、ZIP、离线资源和文件摘要。
+- `distribution-results.json`：发布架构、最低系统、签名、DMG、离线资源和文件摘要。
 - [真实 GUI 记录](GUI-VALIDATION.md)：鼠标/键盘实测及工具受限项目。
 
 ## 需求到证据
@@ -45,7 +45,7 @@
 | 24 | 后台窗口定位 | targetWindow 使用 keyWindow、lastWindow 与现存窗口回退；IPC 请求实际加入现有窗口。后台 Dock/Finder 全路径人工复核未完成 |
 | 25 | 1/10/30 MB 多行与 10 MB 单行 | 最终集成报告 performance，分别记录建模、首次显示、编辑、撤销与批量 RSS |
 | 26 | 中文、emoji、组合输入 | native-marked-text-start/commit、paged-unicode-cross-page-undo/redo；GUI 中文 emoji 显示/粘贴。真实输入法候选待补 |
-| 27 | Release 签名/依赖/ZIP | distribution-results；本机 ad hoc 签名，无 Developer ID/公证；macOS 13 最低部署标记不代表已在 13 实机测试 |
+| 27 | Release 签名/依赖/DMG | distribution-results；本机 ad hoc 签名，无 Developer ID/公证；macOS 13 最低部署标记不代表已在 13 实机测试 |
 
 ## 性能口径
 
@@ -61,7 +61,7 @@
 - Mermaid tiny 官方精简版有图表类型范围限制，本地图片仅支持受限目录内位图。
 - Markdown 预览性能只测试小型复杂文档；30 MB 测试为源码编辑，多 MB Markdown 渲染尚无性能保证。
 - macOS 13–26、Intel、Universal、真实中文输入法候选及完整鼠标跨窗口拖放矩阵仍需补测。
-- 不具备 Developer ID 公证。离线资源与 ZIP 可以本机构建复现。
+- 不具备 Developer ID 公证。离线资源与 DMG 可以本机构建复现。
 
 ## 1.0.0 本机数值（历史样本）
 
@@ -93,3 +93,7 @@ ZIP 2,454,828 字节，应用文件合计 5,692,601 字节。解压后的包 cod
 | 10MB-single | 146.9 ms | 114.4 ms |
 
 1.0.1（build 2）分发包签名、资源和 ZIP 完整性通过。ZIP 2,467,688 字节；SHA-256 `d6b27fbc8cb3d48b3569579b54e6406bbd826199f4c143a2b361f1b65fca2dbc`。启动 RSS 样本仍为上方明确标注的 1.0.0 历史记录，本次没有把旧启动测量冒充新版本实测。
+
+## 2026-10-31 DMG 分发更新
+
+v1.0.4 应用保持不变，当前下载改为 DMG。挂载、安装复制与严格签名等检查，以及公开 curl 下载结果见 [DMG 分发记录](DMG-1.0.4.md)。历史 ZIP 验证记录保留原始测量，不代表当前分发格式。

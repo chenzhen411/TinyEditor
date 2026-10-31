@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-31",
+  "release": "https://github.com/chenzhen411/TinyEditor/releases/tag/v1.0.4",
+  "downloadMethod": "curl -fL --retry 3; anonymous HTTPS asset URLs",
+  "downloadDirectory": "/tmp/TinyEditor-curl-dmg-9k85g11w",
+  "checksumCheck": "TinyEditor-macOS-arm64.dmg: OK",
+  "downloadMatchesLocalDMG": true,
+  "remoteAssetDigestMatches": true,
+  "quarantinePresentOnCurlDownloadedDMG": false,
+  "applicationFileHashesMatchPreviousZIP": true,
+  "applicationFilesCompared": 71,
+  "applicationCodeChanged": false,
+  "GUIIntegrationRerun": false,
+  "readmeInstallationSmokeTest": {
+    "passed": true,
+    "root": "/tmp/TinyEditor-readme-test-bai9qox6",
+    "oldApplicationBackedUp": true,
+    "newApplicationStrictSignature": true,
+    "scope": "README shell block with isolated install/backup targets; running-app guard and GUI open omitted to leave the user app untouched."
+  },
+  "finalReleaseAssets": [
+    {
+      "name": "SHA256SUMS.txt",
+      "size": 93,
+      "digest": "sha256:69fe6d7df830e24ecd52dd453d0b87491e92ccd95e8e10a050a7b101efbd17c3"
+    },
+    {
+      "name": "TinyEditor-macOS-arm64.dmg",
+      "size": 2702886,
+      "digest": "sha256:d4a84a097e5e757032aba5f2efc01eb3ad9ac4867ba5c6f45086476e75d18428"
+    }
+  ],
+  "applicationZIPAssetRemoved": true
+}

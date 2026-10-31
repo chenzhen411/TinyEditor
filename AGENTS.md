@@ -11,7 +11,7 @@
 - No accounts, cloud, AI, plugins, project management. No clearing user data or unknown edits.
 
 ## Build
-`./scripts/build.sh` creates an arm64 Release app and ZIP under artifacts. Swift Package Manager, system frameworks only. `swift test` exercises data protection and source mapping support. Preview dependencies are vendored and locked; runtime requires no Node/network.
+`./scripts/build.sh` creates an arm64 Release app and DMG under artifacts, plus SHA256SUMS.txt. ZIP distribution was replaced by DMG at the user's request on 2026-10-31. `scripts/package-dmg.sh` packages the clean staged app. Swift Package Manager, system frameworks only. `swift test` exercises data protection and source mapping support. Preview dependencies are vendored and locked; runtime requires no Node/network.
 
 ## Architecture
 Core.swift: codec, line index, file version, preferences/recovery.
@@ -81,4 +81,9 @@ Initial environment: macOS 27.2, arm64; Swift 6.4 CLI tools, no full Xcode requi
 ## Public repository / distribution signing (2026-10-31)
 - User explicitly requested public visibility; chenzhen411/TinyEditor is now public. Anonymous GitHub API access to repository and v1.0.4 release verified. Targeted scan of 209 reachable historical blobs found no common private-key/token patterns or credential file paths; scope recorded in docs/publication-results.json.
 - User confirmed no Apple Developer account. User/system keychain checks returned zero valid code signing identities. Developer ID signing and notarization could not be performed; v1.0.4 remains accurately labeled ad hoc and prerelease. No application binaries were changed.
-- Before a future formal release, obtain Developer ID Application certificate/private key and notarization authentication in local Keychain, enable hardened runtime and secure timestamp, require Accepted notarization, staple/validate and Gatekeeper acceptance, then rebuild/verify ZIP and publish. See docs/SIGNING.md. Never claim the current build.sh ad hoc output is formally signed.
+- Before a future formal release, obtain Developer ID Application certificate/private key and notarization authentication in local Keychain, enable hardened runtime and secure timestamp, require Accepted notarization, staple/validate and Gatekeeper acceptance, then rebuild/verify DMG and publish. See docs/SIGNING.md. Never claim the current build.sh ad hoc output is formally signed.
+
+## DMG-only current distribution (2026-10-31)
+- User requested DMG and curl install documentation, removing the application ZIP distribution. v1.0.4 now ships TinyEditor-macOS-arm64.dmg and SHA256SUMS.txt. Packaging-only change: all 71 application file hashes match the prior v1.0.4 ZIP.
+- Build/package scripts produce DMG; verify-distribution.py checks image integrity, read-only mount, app and copied installation strict signatures, architecture, offline resources, Applications link and exclusion of InputCheck.
+- Anonymous curl download/checksum passed. README install block passed in isolated install/backup locations without replacing or launching the user's application. Current Release ZIP asset removed; historic validation records remain factual. See docs/DMG-1.0.4.md.

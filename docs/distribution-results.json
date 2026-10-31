@@ -5,14 +5,15 @@
   "minimumSystemVerified": "13.0",
   "signature": "ad hoc",
   "notarized": false,
-  "zipIntegrity": true,
-  "zipSHA256": "a4dcb5b658bb240fa415a1f4994d412836f47c257522615af2f3db808f40c36f",
-  "zipBytes": 2475134,
+  "format": "DMG / UDZO",
+  "dmgIntegrity": true,
+  "dmgSHA256": "d4a84a097e5e757032aba5f2efc01eb3ad9ac4867ba5c6f45086476e75d18428",
+  "dmgBytes": 2702886,
   "appFileBytes": 5740681,
   "resourceLinksComplete": true,
-  "codeSignatureVerification": "/tmp/TinyEditor-zip-x38x3_2r/TinyEditor.app: valid on disk\n/tmp/TinyEditor-zip-x38x3_2r/TinyEditor.app: satisfies its Designated Requirement",
-  "codeSignatureIdentity": "Executable=/private/tmp/TinyEditor-zip-x38x3_2r/TinyEditor.app/Contents/MacOS/TinyEditor\nIdentifier=top.moriarty.TinyEditor\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=1968 flags=0x2(adhoc) hashes=55+3 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1769472\nHash type=sha256 size=32\nCandidateCDHash sha256=b7086efb36afeee3659658968265b070f777176e\nCandidateCDHashFull sha256=b7086efb36afeee3659658968265b070f777176e4e707bda99cb4f52924d75d1\nHash choices=sha256\nCMSDigest=b7086efb36afeee3659658968265b070f777176e4e707bda99cb4f52924d75d1\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=475136\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=b7086efb36afeee3659658968265b070f777176e\nSignature=adhoc\nInfo.plist entries=17\nTeamIdentifier=not set\nSealed Resources version=2 rules=13 files=68\nInternal requirements count=0 size=12\nTotal signatures=1\nChosen signature=1",
-  "buildVersion": "/tmp/TinyEditor-zip-x38x3_2r/TinyEditor.app/Contents/MacOS/TinyEditor:\nLoad command 11\n      cmd LC_BUILD_VERSION\n  cmdsize 32\n platform MACOS\n    minos 13.0\n      sdk 27.0\n   ntools 1\n     tool LD\n  version 27037.1",
+  "codeSignatureVerification": "/tmp/TinyEditor-dmg-check-a5bw6fs2/volume/TinyEditor.app: valid on disk\n/tmp/TinyEditor-dmg-check-a5bw6fs2/volume/TinyEditor.app: satisfies its Designated Requirement",
+  "codeSignatureIdentity": "Executable=/private/tmp/TinyEditor-dmg-check-a5bw6fs2/volume/TinyEditor.app/Contents/MacOS/TinyEditor\nIdentifier=top.moriarty.TinyEditor\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=1968 flags=0x2(adhoc) hashes=55+3 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1769472\nHash type=sha256 size=32\nCandidateCDHash sha256=b7086efb36afeee3659658968265b070f777176e\nCandidateCDHashFull sha256=b7086efb36afeee3659658968265b070f777176e4e707bda99cb4f52924d75d1\nHash choices=sha256\nCMSDigest=b7086efb36afeee3659658968265b070f777176e4e707bda99cb4f52924d75d1\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=475136\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=b7086efb36afeee3659658968265b070f777176e\nSignature=adhoc\nInfo.plist entries=17\nTeamIdentifier=not set\nSealed Resources version=2 rules=13 files=68\nInternal requirements count=0 size=12\nTotal signatures=1\nChosen signature=1",
+  "buildVersion": "/tmp/TinyEditor-dmg-check-a5bw6fs2/volume/TinyEditor.app/Contents/MacOS/TinyEditor:\nLoad command 11\n      cmd LC_BUILD_VERSION\n  cmdsize 32\n platform MACOS\n    minos 13.0\n      sdk 27.0\n   ntools 1\n     tool LD\n  version 27037.1",
   "files": {
     "Contents/Info.plist": "7a4c241635690e3026f4268b32c060bb00b2196b4a4a949cfc8bce92a52d7946",
     "Contents/MacOS/TinyEditor": "fde81deef3888d8e87f68f6d79bc60976e8d24851ed44b8c9b660af28074bfc2",
@@ -86,5 +87,9 @@
     "Contents/Resources/TinyEditor.icns": "67590bff83d3b790890f65fa9f103a4770348922c7bd7d5f797ecc6e599e605f",
     "Contents/_CodeSignature/CodeResources": "6dc457f7a86d1877e90ab7db47f6cd5d4117103c8e1d3894bedeb615b487b867"
   },
-  "inputDriverExcluded": true
+  "inputDriverExcluded": true,
+  "applicationsShortcut": true,
+  "mountedReadOnly": true,
+  "installedCopyStrictSignature": "/tmp/TinyEditor-dmg-check-a5bw6fs2/installed/TinyEditor.app: valid on disk\n/tmp/TinyEditor-dmg-check-a5bw6fs2/installed/TinyEditor.app: satisfies its Designated Requirement",
+  "dmgVerification": "正在检查“Protective Master Boot Record（MBR：0）”的校验和…\nProtective Master Boot Record（MBR：0）：已验证CRC32 $4D9E27ED\n正在检查“GPT Header（Primary GPT Header：1）”的校验和…\n    GPT Header（Primary GPT Header：1）：已验证CRC32 $89996198\n正在检查“GPT Partition Data（Primary GPT Table：2）”的校验和…\nGPT Partition Data（Primary GPT Table：已验证CRC32 $3AD4506B\n正在检查“（Apple_Free：3）”的校验和…\n                      （Apple_Free：3）：已验证CRC32 $00000000\n正在检查“disk image（Apple_HFS：4）”的校验和…\n             disk image（Apple_HFS：4）：已验证CRC32 $33020ADC\n正在检查“（Apple_Free：5）”的校验和…\n                      （Apple_Free：5）：已验证CRC32 $00000000\n正在检查“GPT Partition Data（Backup GPT Table：6）”的校验和…\nGPT Partition Data（Backup GPT Table：：已验证CRC32 $3AD4506B\n正在检查“GPT Header（Backup GPT Header：7）”的校验和…\n     GPT Header（Backup GPT Header：7）：已验证CRC32 $BB529898\n已验证CRC32 $E3AC6C3D\nhdiutil: verify: checksum of \"/Users/ipanda/Documents/ChatGPT/TinyEditor/artifacts/TinyEditor-macOS-arm64.dmg\" is VALID"
 }

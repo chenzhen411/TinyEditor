@@ -19,7 +19,7 @@ xattr -dr com.apple.FinderInfo "$APP" 2>/dev/null || true
 xattr -dr com.apple.ResourceFork "$APP" 2>/dev/null || true
 codesign --force --sign - --timestamp=none "$APP"
 codesign --verify --deep --strict --verbose=2 "$APP"
-ditto -c -k --norsrc --noextattr --keepParent "$APP" artifacts/TinyEditor-macOS-arm64.zip
+./scripts/package-dmg.sh "$APP"
 ditto --norsrc --noextattr "$APP" artifacts/TinyEditor.app
 sleep 1
 for attempt in {1..20}; do
@@ -28,5 +28,4 @@ for attempt in {1..20}; do
   if [ "$attempt" -eq 20 ]; then exit 1; fi
   sleep 0.5
 done
-shasum -a 256 artifacts/TinyEditor-macOS-arm64.zip > artifacts/SHA256SUMS.txt
-du -sh artifacts/TinyEditor.app artifacts/TinyEditor-macOS-arm64.zip
+du -sh artifacts/TinyEditor.app artifacts/TinyEditor-macOS-*.dmg

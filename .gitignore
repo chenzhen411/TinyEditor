@@ -3,3 +3,4 @@ artifacts/*
 !artifacts/.gitkeep
 .DS_Store
 node_modules/
+__pycache__/
