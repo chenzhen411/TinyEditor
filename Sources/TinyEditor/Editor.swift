@@ -417,6 +417,14 @@ final class EditorPane: NSView, NSTextViewDelegate {
     let format = document.resolvedFormat
     guard format != .plain else { return }
     let text = ns.substring(with: range)
+    if format == .shell || format == .sql {
+      for span in ScriptHighlighting.spans(in: text, format: format) {
+        layoutManager.addTemporaryAttribute(
+          .foregroundColor, value: span.kind.color,
+          forCharacterRange: NSRange(location: start + span.range.location, length: span.range.length))
+      }
+      return
+    }
     let patterns: [(String, NSColor)]
     switch format {
     case .json:

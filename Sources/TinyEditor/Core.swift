@@ -12,7 +12,7 @@ struct TinyError: LocalizedError {
 }
 
 enum Format: String, CaseIterable, Codable {
-  case auto, plain, markdown, json, yaml
+  case auto, plain, markdown, json, yaml, shell, sql
   var title: String {
     switch self {
     case .auto: return "自动识别"
@@ -20,6 +20,8 @@ enum Format: String, CaseIterable, Codable {
     case .markdown: return "Markdown"
     case .json: return "JSON"
     case .yaml: return "YAML"
+    case .shell: return "Shell"
+    case .sql: return "SQL"
     }
   }
   func resolved(_ url: URL?) -> Format {
@@ -28,6 +30,8 @@ enum Format: String, CaseIterable, Codable {
     case "md", "markdown": return .markdown
     case "json": return .json
     case "yaml", "yml": return .yaml
+    case "sh": return .shell
+    case "sql": return .sql
     default: return .plain
     }
   }

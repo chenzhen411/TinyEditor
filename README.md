@@ -1,10 +1,10 @@
 # TinyEditor
 
-面向本地文本文件的轻量原生 macOS 编辑器。当前版本 **1.0.4**：圆角活动标签、右侧关闭按钮与跟随的新建按钮，标签栏随正文区域避让侧边栏。应用名 **TinyEditor**，无空格。最低 macOS 13；本次构建为 **Apple Silicon / arm64**。
+面向本地文本文件的轻量原生 macOS 编辑器。当前版本 **1.0.5**：新增 Shell（`.sh`）和 SQL（`.sql`）的自动识别、手动格式选择与词法高亮。应用名 **TinyEditor**，无空格。最低 macOS 13；本次构建为 **Apple Silicon / arm64**。
 
 仓库现已公开：[chenzhen411/TinyEditor](https://github.com/chenzhen411/TinyEditor)。现有 Release 为预发布包，采用 ad hoc 签名；Developer ID 正式签名与 Apple 公证尚未完成，所需条件见 [签名发行说明](docs/SIGNING.md)。
 
-- TXT、Markdown、JSON、YAML；标题栏手动选择格式并按文件路径记忆。
+- TXT、Markdown、JSON、YAML、Shell、SQL；标题栏手动选择格式并按文件路径记忆。
 - AppKit 原生纯文本编辑、撤销/重做、查找/替换、逻辑行号与自动换行。
 - 多窗口、多标签、标签重排/拆窗/合并、共享最近文件列表与独立窗口侧边栏。
 - Markdown 默认预览，离线表格、任务列表、代码高亮、Mermaid、KaTeX 和经过过滤的 HTML。
@@ -14,7 +14,7 @@
 
 ## 运行与安装
 
-从 [GitHub Releases](https://github.com/chenzhen411/TinyEditor/releases/tag/v1.0.4) 下载 `TinyEditor-macOS-arm64.dmg`，打开后将 `TinyEditor.app` 拖入 `Applications`。如已安装旧版，先保存文档并按 ⌘Q 正常退出。项目内也提供 `artifacts/TinyEditor.app`。Finder 可用“打开方式”打开文本文件，也可将文件拖到 Dock 图标。
+从 [GitHub Releases](https://github.com/chenzhen411/TinyEditor/releases/tag/v1.0.5) 下载 `TinyEditor-macOS-arm64.dmg`，打开后将 `TinyEditor.app` 拖入 `Applications`。如已安装旧版，先保存文档并按 ⌘Q 正常退出。项目内也提供 `artifacts/TinyEditor.app`。Finder 可用“打开方式”打开文本文件，也可将文件拖到 Dock 图标。
 
 本次应用采用 **ad hoc 本地签名**，没有 Developer ID 签名及 Apple 公证。跨机器下载时 macOS 可能要求通过系统提供的打开流程确认。
 
@@ -34,7 +34,7 @@
     exit 1
   fi
   tinyeditor_tmp="$(mktemp -d)"
-  tinyeditor_url='https://github.com/chenzhen411/TinyEditor/releases/download/v1.0.4'
+  tinyeditor_url='https://github.com/chenzhen411/TinyEditor/releases/download/v1.0.5'
   curl -fL --retry 3 "$tinyeditor_url/TinyEditor-macOS-arm64.dmg" -o "$tinyeditor_tmp/TinyEditor-macOS-arm64.dmg"
   curl -fL --retry 3 "$tinyeditor_url/SHA256SUMS.txt" -o "$tinyeditor_tmp/SHA256SUMS.txt"
   (cd "$tinyeditor_tmp" && shasum -a 256 -c SHA256SUMS.txt)
@@ -129,8 +129,10 @@ python3 scripts/verify-distribution.py
 
 多行文件使用 TextKit 1 非连续排版和可见范围词法高亮。超过 100,000 UTF-16 单元的逻辑行采用约 32,768 单元的原生分段视图，避免整条巨型段落阻塞编辑。条带显示当前位置，可前后翻段；查找/替换、保存、全选复制针对完整原文，跨段撤销保留。鼠标连续选择局限于当前分段。列号以 UTF-16 位置计数。
 
-Mermaid tiny 官方精简版不包含 mindmap、architecture 及 Mermaid 内嵌 KaTeX；文档级数学公式由独立 KaTeX 支持。渲染失败时保留可复制的原文。JSON/YAML 是词法高亮，**不是完整语法检查**。
+Mermaid tiny 官方精简版不包含 mindmap、architecture 及 Mermaid 内嵌 KaTeX；文档级数学公式由独立 KaTeX 支持。渲染失败时保留可复制的原文。JSON、YAML、Shell 和 SQL 使用轻量词法高亮，**不是完整语法检查**。Shell 支持常见控制关键字、变量、字符串、注释；SQL 支持常见关键字、数字、参数、引号标识符及行/块注释。高亮按可见范围及有限上下文工作，不保证复杂 Shell here-document、所有 SQL 方言或超长跨屏词法单元的完整解析。
 
 本次实际运行环境为 macOS 27.2 arm64；macOS 13–26、Intel 和 Universal 尚未实机验收。没有自动设置为默认编辑器，也不清空用户偏好、最近记录、草稿或系统缓存。
 
 1.0.4 按参考图重做圆角标签，浅色/深色分别适配；真实点击与回归范围见 [标签样式记录](docs/TABS-1.0.4.md)。
+
+1.0.5 新增 `.sh` / `.sql` 源码模式，保留原文、换行、撤销和按路径记忆的格式覆盖，详见 [Shell/SQL 验证记录](docs/SHELL-SQL-1.0.5.md)。

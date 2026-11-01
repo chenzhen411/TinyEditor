@@ -1,19 +1,19 @@
 {
   "architecture": "arm64",
-  "date": "2026-10-30T03:33:42Z",
+  "date": "2026-11-01T01:14:00Z",
   "os": "版本27.2（版号26B123）",
   "passed": true,
   "performance": [
     {
       "bytes": 999990,
-      "decodeAndModelMs": 32.58490562438965,
+      "decodeAndModelMs": 32.037973403930664,
       "editedLength": 799993,
       "editedPrefix": "X0123456789 abcdef 中文 😀\n0",
-      "editToDisplayMs": 13.061046600341797,
+      "editToDisplayMs": 12.671947479248047,
       "name": "1MB-multiline",
-      "openToDisplayMs": 177.43897438049316,
-      "rssAfterMB": 151.515625,
-      "rssBeforeMB": 126.328125,
+      "openToDisplayMs": 283.36405754089355,
+      "rssAfterMB": 99.265625,
+      "rssBeforeMB": 54.515625,
       "undoAvailable": true,
       "undoLength": 799992,
       "undoPrefix": "0123456789 abcdef 中文 😀\n01",
@@ -21,14 +21,14 @@
     },
     {
       "bytes": 9999990,
-      "decodeAndModelMs": 290.3560400009155,
+      "decodeAndModelMs": 385.65194606781006,
       "editedLength": 7999993,
       "editedPrefix": "X0123456789 abcdef 中文 😀\n0",
-      "editToDisplayMs": 14.235973358154297,
+      "editToDisplayMs": 15.084028244018555,
       "name": "10MB-multiline",
-      "openToDisplayMs": 396.66104316711426,
-      "rssAfterMB": 213.78125,
-      "rssBeforeMB": 167.375,
+      "openToDisplayMs": 567.2320127487183,
+      "rssAfterMB": 143.96875,
+      "rssBeforeMB": 119.203125,
       "undoAvailable": true,
       "undoLength": 7999992,
       "undoPrefix": "0123456789 abcdef 中文 😀\n01",
@@ -36,14 +36,14 @@
     },
     {
       "bytes": 30000000,
-      "decodeAndModelMs": 886.52503490448,
+      "decodeAndModelMs": 966.2688970565796,
       "editedLength": 24000001,
       "editedPrefix": "X0123456789 abcdef 中文 😀\n0",
-      "editToDisplayMs": 16.047000885009766,
+      "editToDisplayMs": 17.129063606262207,
       "name": "30MB-multiline",
-      "openToDisplayMs": 1007.4790716171265,
-      "rssAfterMB": 325.5,
-      "rssBeforeMB": 277.484375,
+      "openToDisplayMs": 1143.671989440918,
+      "rssAfterMB": 169.03125,
+      "rssBeforeMB": 220.125,
       "undoAvailable": true,
       "undoLength": 24000000,
       "undoPrefix": "0123456789 abcdef 中文 😀\n01",
@@ -51,21 +51,21 @@
     },
     {
       "bytes": 9999995,
-      "decodeAndModelMs": 52.02889442443848,
+      "decodeAndModelMs": 83.91499519348145,
       "editedLength": 9999996,
       "editedPrefix": "Xabcdef0123456789 abcdef0",
-      "editToDisplayMs": 116.59300327301025,
+      "editToDisplayMs": 136.025071144104,
       "name": "10MB-single",
-      "openToDisplayMs": 156.17895126342773,
-      "rssAfterMB": 361.4375,
-      "rssBeforeMB": 363.53125,
+      "openToDisplayMs": 564.4890069961548,
+      "rssAfterMB": 89.078125,
+      "rssBeforeMB": 209.703125,
       "undoAvailable": true,
       "undoLength": 9999995,
       "undoPrefix": "abcdef0123456789 abcdef01",
       "undoPreserved": true
     }
   ],
-  "pid": 67696,
+  "pid": 81855,
   "results": [
     {
       "detail": "",
@@ -165,6 +165,76 @@
     {
       "detail": "",
       "name": "native-yaml-gutter",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-shell-highlight",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-shell-format-selector",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-shell-edit",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-shell-undo-clean",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-shell-redo",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-shell-save-reopen",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-shell-gutter",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-sql-highlight",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-sql-format-selector",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-sql-edit",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-sql-undo-clean",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-sql-redo",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-sql-save-reopen",
+      "passed": true
+    },
+    {
+      "detail": "",
+      "name": "native-sql-gutter",
       "passed": true
     },
     {

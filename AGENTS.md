@@ -17,6 +17,7 @@
 Core.swift: codec, line index, file version, preferences/recovery.
 Document.swift: canonical NSTextStorage, undo, I/O and conflict protection.
 Editor.swift: TextKit 1 editor, visible-line gutter and lexical highlighter.
+ScriptHighlighting.swift: cached, bounded lexical coloring for Shell and SQL; no script/query execution.
 Preview.swift + Resources/Preview: WKWebView, source-mapped Markdown, offline render/security.
 Window.swift: tabs, drag/drop, sidebar, toolbar and status.
 Drag.swift: authenticated native drag forwarding and the transparent registered frame region.
@@ -87,3 +88,9 @@ Initial environment: macOS 27.2, arm64; Swift 6.4 CLI tools, no full Xcode requi
 - User requested DMG and curl install documentation, removing the application ZIP distribution. v1.0.4 now ships TinyEditor-macOS-arm64.dmg and SHA256SUMS.txt. Packaging-only change: all 71 application file hashes match the prior v1.0.4 ZIP.
 - Build/package scripts produce DMG; verify-distribution.py checks image integrity, read-only mount, app and copied installation strict signatures, architecture, offline resources, Applications link and exclusion of InputCheck.
 - Anonymous curl download/checksum passed. README install block passed in isolated install/backup locations without replacing or launching the user's application. Current Release ZIP asset removed; historic validation records remain factual. See docs/DMG-1.0.4.md.
+
+## 1.0.5 Shell / SQL (2026-11-01)
+- Add .sh => Shell and .sql => SQL auto resolution, persistent manual format overrides, file type declarations and cached lexical coloring. New enum cases append to existing formats. All files remain plain text; no execution or database features.
+- 12 core cases / 3,089 assertions and 97 native integration checks pass. New checks include quoted/comment token precedence, Unicode ranges, format persistence/rename and .sh executable mode/CRLF preservation on save.
+- Real CUA input/screenshots checked .sh/.sql auto modes, source coloring, Shell edit/undo/redo/save and .txt manual SQL followed by close/reopen. DMG/signature/resources verified. See docs/SHELL-SQL-1.0.5.md.
+- Coloring uses bounded visible context, not a complete shell/SQL parser. Here-documents, all SQL dialects and very long cross-screen lexical units are outside full parsing guarantees. Existing compatibility and drag verification limits still apply.

@@ -59,6 +59,70 @@ final class CoreTests: XCTestCase {
     XCTAssertEqual(Format.auto.resolved(URL(fileURLWithPath: "/a.JSON")), .json)
     XCTAssertEqual(Format.auto.resolved(URL(fileURLWithPath: "/no-extension")), .plain)
     XCTAssertEqual(Format.markdown.resolved(URL(fileURLWithPath: "/a.txt")), .markdown)
+    XCTAssertEqual(Format.auto.resolved(URL(fileURLWithPath: "/script.SH")), .shell)
+    XCTAssertEqual(Format.auto.resolved(URL(fileURLWithPath: "/query.SQL")), .sql)
+    XCTAssertEqual(Format.shell.resolved(URL(fileURLWithPath: "/script.txt")), .shell)
+    XCTAssertEqual(Format.sql.resolved(URL(fileURLWithPath: "/query.sh")), .sql)
+  }
+  func testScriptLexicalHighlighting() {
+    let shell = "😀\r\n# echo $USER\r\nif test 42; then printf '%s\\n' \"# fi $USER\" $USER ${name:-x}; fi\r\nfile#name"
+    let shellSpans = ScriptHighlighting.spans(in: shell, format: .shell)
+    let shellText = shell as NSString
+    XCTAssertEqual(shellSpans.map { shellText.substring(with: $0.range) }, [
+      "# echo $USER", "if", "test", "42", "then", "printf", "'%s\\n'", "\"# fi $USER\"",
+      "$USER", "${name:-x}", "fi",
+    ])
+    XCTAssertEqual(shellSpans.first?.kind, .comment)
+    XCTAssertEqual(shellSpans[6].kind, .string)
+    XCTAssertEqual(shellSpans[8].kind, .variable)
+    let sql = "😀\r\n-- SELECT 1\r\nselect \"from\", 'it''s -- text', 42 FROM t /* WHERE 'x' */ WHERE id = :id;"
+    let sqlText = sql as NSString
+    let sqlSpans = ScriptHighlighting.spans(in: sql, format: .sql)
+    XCTAssertEqual(sqlSpans.map { sqlText.substring(with: $0.range) }, [
+      "-- SELECT 1", "select", "\"from\"", "'it''s -- text'", "42", "FROM", "/* WHERE 'x' */", "WHERE", ":id",
+    ])
+    XCTAssertEqual(sqlSpans[2].kind, .identifier)
+    XCTAssertEqual(sqlSpans[3].kind, .string)
+    XCTAssertEqual(sqlSpans[6].kind, .comment)
+    XCTAssertEqual(sqlSpans[8].kind, .variable)
+    XCTAssertEqual(ScriptHighlighting.spans(in: "/* unclosed\nSELECT", format: .sql).first?.kind, .comment)
+  }
+  func testScriptFormatPreferencePersistence() throws {
+    for mode in [Format.shell, .sql] {
+      let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+      try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+      defer { try? FileManager.default.removeItem(at: root) }
+      let url = root.appendingPathComponent("wrong.txt")
+      try Data("source\r\n😀".utf8).write(to: url)
+      let doc = try EditorDocument.open(url)
+      doc.format = mode
+      XCTAssertFalse(doc.isDirty)
+      try doc.rename("renamed.txt")
+      let reopened = try EditorDocument.open(doc.url!)
+      XCTAssertEqual(reopened.resolvedFormat, mode)
+      XCTAssertEqual(reopened.text, "source\r\n😀")
+      XCTAssertEqual(Settings.shared.format(doc.url), mode)
+      let store = PreferenceStore(file: Settings.shared.root.appendingPathComponent("Preferences.json"))
+      let saved = store.dictionary(forKey: "formats")
+      XCTAssertEqual(saved?[canonical(doc.url!).path] as? String, mode.rawValue)
+    }
+  }
+  func testShellSavePreservesExecutableMode() throws {
+    let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: root) }
+    let url = root.appendingPathComponent("executable.sh")
+    let original = "#!/bin/sh\r\nprintf '%s\\n' \"中文 😀\"\r\n"
+    try Data(original.utf8).write(to: url)
+    try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: url.path)
+    let doc = try EditorDocument.open(url)
+    doc.storage.append(NSAttributedString(string: "# edited\r\n"))
+    try doc.write(to: url)
+    XCTAssertEqual(doc.resolvedFormat, .shell)
+    XCTAssertEqual(doc.newline, "CRLF")
+    XCTAssertEqual(try Data(contentsOf: url), Data((original + "# edited\r\n").utf8))
+    let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+    XCTAssertEqual((attributes[.posixPermissions] as? NSNumber)?.intValue, 0o755)
   }
   func testResourceBoundary() throws {
     let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)

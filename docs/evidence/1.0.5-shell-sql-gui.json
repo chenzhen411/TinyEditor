@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-01",
+  "version": "1.0.5",
+  "build": "6",
+  "kind": "CUA native screenshots and mouse/keyboard observations, plus filesystem verification",
+  "isolatedDataDirectory": "/tmp/TinyEditor-105-gui",
+  "guiObservations": [
+    "Shell auto mode, gutter and token colors visible",
+    "SQL auto mode, gutter, parameter, string and block-comment coloring visible",
+    "Shell edit adds dirty dot; undo removes it; redo and save succeed",
+    "Format selector includes Shell and SQL",
+    "wrong.txt manually selected SQL, then closed and reopened with SQL restored",
+    "Installed normal-mode app started with a clean blank document"
+  ],
+  "diskShellEditVerified": true,
+  "wrongSuffixDocumentUnchanged": true,
+  "manualSQLPreferenceOnDisk": true,
+  "installedStrictSignaturePassed": true,
+  "installedExecutableMatchesDMG": true,
+  "mainProcesses": [
+    "83492 /Applications/TinyEditor.app/Contents/MacOS/TinyEditor"
+  ],
+  "inputDriverPermissionRegranted": false,
+  "fullRealDragMatrixRerun": false,
+  "screenshots": "Reviewed inline in this Codex session; this file records observations, not pixel comparison."
+}

@@ -4,11 +4,11 @@
 
 验证分为自动数据检查、实际 AppKit/WebKit 集成检查、真实 GUI 操作、性能实测和未验证兼容范围。不存在“全部人工验收通过”的声明。
 
-当前版本 1.0.4 / build 5：83 项集成检查正常退出；圆角标签与真实点击见 [1.0.4 记录](TABS-1.0.4.md)，侧边栏与标签栏布局见 [1.0.3 记录](LAYOUT-1.0.3.md)。此前完整单/多标签真实拖放矩阵见 [1.0.2 回归记录](DRAG-REGRESSION-1.0.2.md) 和 real-drag-results.json。既有启动测量为历史数据，本轮性能以最新 integration-results.json 为准。
+当前版本 1.0.5 / build 6：97 项集成检查正常退出，Shell / SQL 新模式见 [1.0.5 记录](SHELL-SQL-1.0.5.md)；圆角标签与真实点击见 [1.0.4 记录](TABS-1.0.4.md)，侧边栏与标签栏布局见 [1.0.3 记录](LAYOUT-1.0.3.md)。此前完整单/多标签真实拖放矩阵见 [1.0.2 回归记录](DRAG-REGRESSION-1.0.2.md) 和 real-drag-results.json。既有启动测量为历史数据，本轮性能以最新 integration-results.json 为准。
 
 ## 自动证据
 
-- `core-results.json`：核心数据保护与随机增量行索引，9 个用例、3,061 条断言。
+- `core-results.json`：核心数据保护与随机增量行索引，12 个用例、3,089 条断言。
 - `integration-results.json`：原生编辑/保存/撤销、源码模式、离线渲染、系统剪贴板、窗口间文档移动、超长行分页、组合文本、并发 IPC、不同安装路径。
 - `prototype-results.json`：第一阶段关键原型结果；后续以最终集成报告为准。
 - `launch-results.json`：新 GUI 进程启动、首次就绪、主进程 RSS 和新 WebKit 辅助进程。
@@ -19,12 +19,12 @@
 
 | # | 验收要求 | 实际证据与边界 |
 |---|---|---|
-| 1 | 四种格式输入、高亮、保存、撤销、重开 | 集成 native-*-edit/undo/redo/save-reopen；代码块高亮计数。源码词法高亮按可见范围实现；四种高亮配色未逐一人工截图 |
+| 1 | 六种格式输入、高亮、保存、撤销、重开 | 集成 native-*-edit/undo/redo/save-reopen；代码块高亮计数。源码词法高亮按可见范围实现；原有四种高亮配色未逐一人工截图；Shell/SQL 自动状态及真实截图见 1.0.5 记录 |
 | 2 | Markdown 默认预览与未保存切换 | markdown-default-preview / markdown-memory-latest；GUI 输入并切换可见 |
 | 3 | 各类预览原文复制 | preview-copy-*、CRLF 全选、精确普通文本子串；语法选区保守扩展完整源码块 |
 | 4 | 实际剪贴板纯文本 | 原生读取 NSPasteboard 类型，仅 UTF-8 纯文本及 macOS NSStringPboardType 纯文本别名；GUI pbpaste 与原文逐字节相同 |
 | 5 | 手动格式覆盖与记忆 | Core 路径偏好与重命名迁移；1.0.2 真实选择 .txt 为 JSON 后跨窗、撤销/重做保留；全新进程重开手动模式未单独人工验证 |
-| 6 | 四种源码行号、预览隐藏 | native-*-gutter；GUI 源码与预览实际画面 |
+| 6 | 六种源码行号、预览隐藏 | native-*-gutter；GUI 源码与预览实际画面 |
 | 7 | 行号滚动、折行、编辑、撤销、底部 | 1,500 次随机编辑与全量行索引/换行类型比较；原生编辑撤销；GUI 底部无竖线。长距离滚动/折行细节待补人工 |
 | 8 | 标签切换无白屏和跳动 | 同一窗口先准备目标视图，稳定文档切换；GUI 点击检查，未录制高帧率视频 |
 | 9 | 侧边栏窗口状态隔离 | sidebar-window-state；GUI 展开后切换标签仍为 220 pt。拖动调宽/滚动选择保留待补人工 |

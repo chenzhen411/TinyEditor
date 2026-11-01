@@ -1,5 +1,129 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict>
-<key>CFBundleName</key><string>TinyEditor</string><key>CFBundleDisplayName</key><string>TinyEditor</string><key>CFBundleIdentifier</key><string>top.moriarty.TinyEditor</string><key>CFBundleExecutable</key><string>TinyEditor</string><key>CFBundlePackageType</key><string>APPL</string><key>CFBundleShortVersionString</key><string>1.0.4</string><key>CFBundleVersion</key><string>5</string><key>CFBundleIconFile</key><string>TinyEditor</string><key>LSMinimumSystemVersion</key><string>13.0</string><key>NSHighResolutionCapable</key><true/><key>NSPrincipalClass</key><string>NSApplication</string><key>LSMultipleInstancesProhibited</key><true/><key>NSHumanReadableCopyright</key><string>© 2026 TinyEditor contributors</string><key>CFBundleDevelopmentRegion</key><string>zh_CN</string><key>CFBundleLocalizations</key><array><string>zh_CN</string></array>
-<key>CFBundleDocumentTypes</key><array><dict><key>CFBundleTypeName</key><string>文本文件</string><key>CFBundleTypeRole</key><string>Editor</string><key>LSHandlerRank</key><string>Alternate</string><key>LSItemContentTypes</key><array><string>public.plain-text</string><string>net.daringfireball.markdown</string><string>public.json</string><string>public.yaml</string></array><key>CFBundleTypeExtensions</key><array><string>txt</string><string>md</string><string>markdown</string><string>json</string><string>yaml</string><string>yml</string></array></dict></array>
-<key>UTImportedTypeDeclarations</key><array><dict><key>UTTypeIdentifier</key><string>net.daringfireball.markdown</string><key>UTTypeConformsTo</key><array><string>public.plain-text</string></array><key>UTTypeDescription</key><string>Markdown 文档</string><key>UTTypeTagSpecification</key><dict><key>public.filename-extension</key><array><string>md</string><string>markdown</string></array></dict></dict><dict><key>UTTypeIdentifier</key><string>public.yaml</string><key>UTTypeConformsTo</key><array><string>public.plain-text</string></array><key>UTTypeTagSpecification</key><dict><key>public.filename-extension</key><array><string>yaml</string><string>yml</string></array></dict></dict></array>
-</dict></plist>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleName</key>
+	<string>TinyEditor</string>
+	<key>CFBundleDisplayName</key>
+	<string>TinyEditor</string>
+	<key>CFBundleIdentifier</key>
+	<string>top.moriarty.TinyEditor</string>
+	<key>CFBundleExecutable</key>
+	<string>TinyEditor</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.5</string>
+	<key>CFBundleVersion</key>
+	<string>6</string>
+	<key>CFBundleIconFile</key>
+	<string>TinyEditor</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>13.0</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>LSMultipleInstancesProhibited</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2026 TinyEditor contributors</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>zh_CN</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>zh_CN</string>
+	</array>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>文本文件</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.plain-text</string>
+				<string>net.daringfireball.markdown</string>
+				<string>public.json</string>
+				<string>public.yaml</string>
+				<string>public.shell-script</string>
+				<string>top.moriarty.TinyEditor.sql</string>
+			</array>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>txt</string>
+				<string>md</string>
+				<string>markdown</string>
+				<string>json</string>
+				<string>yaml</string>
+				<string>yml</string>
+				<string>sh</string>
+				<string>sql</string>
+			</array>
+		</dict>
+	</array>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>net.daringfireball.markdown</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Markdown 文档</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>md</string>
+					<string>markdown</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>public.yaml</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>yaml</string>
+					<string>yml</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>top.moriarty.TinyEditor.sql</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.source-code</string>
+				<string>public.plain-text</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>SQL 源码</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sql</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/sql</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

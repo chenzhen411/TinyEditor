@@ -71,17 +71,30 @@ enum IntegrationCheck {
   func run() async {
     let app = AppController.shared
     do {
-      for format in [Format.plain, .markdown, .json, .yaml] {
+      for format in [Format.plain, .markdown, .json, .yaml, .shell, .sql] {
         let suffix: [Format: String] = [
-          .plain: "txt", .markdown: "md", .json: "json", .yaml: "yaml",
+          .plain: "txt", .markdown: "md", .json: "json", .yaml: "yaml", .shell: "sh", .sql: "sql",
         ]
         let url = root.appendingPathComponent("native.\(suffix[format]!)")
-        let original = "first\r\n中文 😀\r\n"
+        let original: String
+        switch format {
+        case .shell: original = "#!/bin/sh\r\nprintf '%s\\n' \"中文 😀\"\r\n"
+        case .sql: original = "-- 中文 😀\r\nSELECT id FROM demo WHERE active = true;\r\n"
+        default: original = "first\r\n中文 😀\r\n"
+        }
         try Data(original.utf8).write(to: url, options: .atomic)
         let doc = try EditorDocument.open(url)
         doc.previewing = false
         let owner = app.newWindow(with: doc)
         await pause()
+        if format == .shell || format == .sql {
+          let editor = doc.sourcePane()
+          editor.highlight()
+          let token = (original as NSString).range(of: format == .shell ? "printf" : "SELECT")
+          let color = editor.layoutManager.temporaryAttribute(.foregroundColor, atCharacterIndex: token.location, effectiveRange: nil) as? NSColor
+          check("native-\(format.rawValue)-highlight", color == .systemBlue && doc.text == original && !doc.isDirty && !doc.undo.canUndo)
+          check("native-\(format.rawValue)-format-selector", owner.formatPopup.itemTitles.contains(format.title) && !doc.previewing && owner.modeSwitch.isHidden)
+        }
         edit(doc, "added")
         doc.refreshDirty()
         check("native-\(format.rawValue)-edit", doc.text == original + "added" && doc.isDirty)
