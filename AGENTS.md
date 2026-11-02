@@ -94,3 +94,8 @@ Initial environment: macOS 27.2, arm64; Swift 6.4 CLI tools, no full Xcode requi
 - 12 core cases / 3,089 assertions and 97 native integration checks pass. New checks include quoted/comment token precedence, Unicode ranges, format persistence/rename and .sh executable mode/CRLF preservation on save.
 - Real CUA input/screenshots checked .sh/.sql auto modes, source coloring, Shell edit/undo/redo/save and .txt manual SQL followed by close/reopen. DMG/signature/resources verified. See docs/SHELL-SQL-1.0.5.md.
 - Coloring uses bounded visible context, not a complete shell/SQL parser. Here-documents, all SQL dialects and very long cross-screen lexical units are outside full parsing guarantees. Existing compatibility and drag verification limits still apply.
+
+## v1.0.5 stable Release / Latest (2026-11-02)
+- User explicitly requested promotion of v1.0.5 from prerelease to a stable GitHub Release and Latest. README links to releases/latest; curl instructions stay pinned to v1.0.5.
+- GitHub release maturity is independent of Apple signing/notarization. Keep accurate ad hoc / not notarized disclosures; do not use missing Developer ID as a reason to force prerelease status.
+- Promotion changes release metadata and documentation only; preserve tag, DMG and checksum assets. Verify prerelease=false and /releases/latest resolves to v1.0.5; record evidence without claiming new app tests or a rebuild.

@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-02",
+  "release": "https://github.com/chenzhen411/TinyEditor/releases/tag/v1.0.5",
+  "tag": "v1.0.5",
+  "prerelease": false,
+  "draft": false,
+  "latestEndpointTag": "v1.0.5",
+  "tagObjectUnchanged": true,
+  "applicationAssetsUnchanged": true,
+  "assets": [
+    {
+      "id": 696960323,
+      "name": "SHA256SUMS.txt",
+      "size": 93,
+      "digest": "sha256:4d707d4489ff1b66fb6e83114ffb41346fdfa347ec6d4db9ac447609ecef354a"
+    },
+    {
+      "id": 696960322,
+      "name": "TinyEditor-macOS-arm64.dmg",
+      "size": 2733367,
+      "digest": "sha256:76426b335f168759c4e9ea4643b7141a23bc2e4a4e651d0aa266212a7e0c8e85"
+    }
+  ],
+  "signature": "ad hoc",
+  "notarized": false,
+  "applicationRebuilt": false,
+  "applicationTestsRerun": false
+}

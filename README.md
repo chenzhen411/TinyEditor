@@ -2,7 +2,7 @@
 
 面向本地文本文件的轻量原生 macOS 编辑器。当前版本 **1.0.5**：新增 Shell（`.sh`）和 SQL（`.sql`）的自动识别、手动格式选择与词法高亮。应用名 **TinyEditor**，无空格。最低 macOS 13；本次构建为 **Apple Silicon / arm64**。
 
-仓库现已公开：[chenzhen411/TinyEditor](https://github.com/chenzhen411/TinyEditor)。现有 Release 为预发布包，采用 ad hoc 签名；Developer ID 正式签名与 Apple 公证尚未完成，所需条件见 [签名发行说明](docs/SIGNING.md)。
+仓库现已公开：[chenzhen411/TinyEditor](https://github.com/chenzhen411/TinyEditor)。**v1.0.5 为正式 Release，已设为 [Latest](https://github.com/chenzhen411/TinyEditor/releases/latest)**。应用采用 ad hoc 本地签名，尚无 Developer ID 签名及 Apple 公证；GitHub 的正式发行标记与 Apple 签名、公证状态相互独立，所需条件见 [签名发行说明](docs/SIGNING.md)。
 
 - TXT、Markdown、JSON、YAML、Shell、SQL；标题栏手动选择格式并按文件路径记忆。
 - AppKit 原生纯文本编辑、撤销/重做、查找/替换、逻辑行号与自动换行。
@@ -14,7 +14,7 @@
 
 ## 运行与安装
 
-从 [GitHub Releases](https://github.com/chenzhen411/TinyEditor/releases/tag/v1.0.5) 下载 `TinyEditor-macOS-arm64.dmg`，打开后将 `TinyEditor.app` 拖入 `Applications`。如已安装旧版，先保存文档并按 ⌘Q 正常退出。项目内也提供 `artifacts/TinyEditor.app`。Finder 可用“打开方式”打开文本文件，也可将文件拖到 Dock 图标。
+从 [GitHub 最新正式版](https://github.com/chenzhen411/TinyEditor/releases/latest) 下载 `TinyEditor-macOS-arm64.dmg`，打开后将 `TinyEditor.app` 拖入 `Applications`。下方 curl 命令固定下载 v1.0.5，便于复现与校验。如已安装旧版，先保存文档并按 ⌘Q 正常退出。项目内也提供 `artifacts/TinyEditor.app`。Finder 可用“打开方式”打开文本文件，也可将文件拖到 Dock 图标。
 
 本次应用采用 **ad hoc 本地签名**，没有 Developer ID 签名及 Apple 公证。跨机器下载时 macOS 可能要求通过系统提供的打开流程确认。
 
