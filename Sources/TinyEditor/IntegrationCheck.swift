@@ -180,6 +180,7 @@ enum IntegrationCheck {
       doc.resolveRecovery()
       for d in Array(second.documents) { second.remove(d) }
       await interactionRegressions()
+      try recentSidebarRegressions()
       let fixture =
         "# 验证\r\n\r\n普通原文\r\n\r\n**粗体** 与 [链接](https://example.com) 及 &amp; 和 \\*转义\\*\r\n\r\n- 列表\r\n- [x] 任务\r\n\r\n> 引用\r\n\r\n| A | B |\r\n|---|---|\r\n| 一 | 二 |\r\n\r\n```json\r\n{\"key\": true}\r\n```\r\n\r\n```mermaid\r\ngraph TD\r\n A[开始] --> B[结束]\r\n```\r\n\r\n行内 $x^2$\r\n\r\n$$\r\n\\frac{a}{b}\r\n$$\r\n\r\n<div>HTML <em>斜体</em></div>\r\n\r\n<script>window.UNSAFE=1</script>\r\n<img src=\"https://example.com/no.png\" onerror=\"window.UNSAFE=1\">\r\n"
       let mdURL = root.appendingPathComponent("preview.md")
@@ -454,6 +455,92 @@ enum IntegrationCheck {
       "drag-end-releases-context",
       DragCoordinator.shared.token == nil && DragCoordinator.shared.sourceCell == nil)
     for doc in Array(target.documents) { target.remove(doc) }
+  }
+  func recentSidebarRegressions() throws {
+    let previous = Settings.shared.recents
+    let name = "很长的文件名-" + String(repeating: "draft-", count: 12) + "summary.txt"
+    let alpha = root.appendingPathComponent("Alpha/" + name)
+    let beta = root.appendingPathComponent("Beta/" + name)
+    for url in [alpha, beta] {
+      try FileManager.default.createDirectory(
+        at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+      try Data("Recent file\n".utf8).write(to: url)
+    }
+    Settings.shared.recents = [alpha.path, beta.path]
+    let owner = AppController.shared.newWindow()
+    defer {
+      for doc in Array(owner.documents) { owner.remove(doc) }
+      Settings.shared.recents = previous
+    }
+    owner.toggleSidebar()
+    let table = owner.recentTable
+    func resize(_ width: CGFloat) -> RecentFileCell? {
+      owner.split.setPosition(width, ofDividerAt: 0)
+      owner.window?.contentView?.layoutSubtreeIfNeeded()
+      table.layoutSubtreeIfNeeded()
+      let cell = table.view(atColumn: 0, row: 0, makeIfNecessary: true) as? RecentFileCell
+      cell?.layoutSubtreeIfNeeded()
+      return cell
+    }
+    func fits(_ cell: RecentFileCell) -> Bool {
+      [cell.nameLabel, cell.pathLabel].allSatisfy {
+        let frame = $0.convert($0.bounds, to: owner.recentScroll.contentView)
+        return frame.width > 0 && frame.minX >= 0
+          && frame.maxX <= owner.recentScroll.contentView.bounds.width
+          && $0.maximumNumberOfLines == 1
+      }
+    }
+    guard let narrow = resize(170) else {
+      check("recent-two-line-row", false, "Missing recent file cell")
+      return
+    }
+    let narrowNameWidth = narrow.nameLabel.frame.width
+    let narrowPathWidth = narrow.pathLabel.frame.width
+    let second = table.view(atColumn: 0, row: 1, makeIfNecessary: true) as? RecentFileCell
+    second?.layoutSubtreeIfNeeded()
+    let sameName = narrow.nameLabel.stringValue == name && second?.nameLabel.stringValue == name
+    let distinctPaths = narrow.fullPath == alpha.path && second?.fullPath == beta.path
+    let visibleFolders = narrow.pathLabel.stringValue.hasSuffix("/Alpha/…")
+      && second?.pathLabel.stringValue.hasSuffix("/Beta/…") == true
+    let nameAbovePath = narrow.isFlipped
+      ? narrow.nameLabel.frame.maxY < narrow.pathLabel.frame.minY
+      : narrow.nameLabel.frame.minY > narrow.pathLabel.frame.maxY
+    check("recent-two-line-row", sameName && distinctPaths && visibleFolders && nameAbovePath
+      && narrow.nameLabel.textColor != narrow.pathLabel.textColor)
+    check(
+      "recent-narrow-ellipsis-and-tooltip",
+      fits(narrow) && narrow.nameLabel.lineBreakMode == .byTruncatingMiddle
+        && narrow.pathLabel.lineBreakMode == .byTruncatingHead
+        && narrow.toolTip == name + "\n" + alpha.path)
+    if let wide = resize(340) {
+      check(
+        "recent-ellipsis-follows-divider", fits(wide)
+          && wide.nameLabel.frame.width > narrowNameWidth + 100
+          && wide.pathLabel.frame.width > narrowPathWidth + 100)
+      wide.show(path: "/tmp/Notes.txt")
+      wide.layoutSubtreeIfNeeded()
+      check("recent-short-path-is-complete", wide.pathLabel.stringValue == "/tmp/Notes.txt")
+    } else {
+      check("recent-ellipsis-follows-divider", false, "Missing resized cell")
+    }
+
+    let search = owner.recentSearch
+    search.stringValue = " bEtA/ "
+    search.sendAction(search.action, to: search.target)
+    let matching = table.view(atColumn: 0, row: 0, makeIfNecessary: true) as? RecentFileCell
+    check("recent-search-path-filter", table.numberOfRows == 1 && matching?.fullPath == beta.path)
+    search.stringValue = "SUMMARY.TXT"
+    search.sendAction(search.action, to: search.target)
+    check("recent-search-filename", table.numberOfRows == 2)
+    search.stringValue = "Beta/"
+    search.sendAction(search.action, to: search.target)
+    Settings.shared.recents = [alpha.path]
+    check("recent-search-no-results-after-history-change", table.numberOfRows == 0)
+    Settings.shared.recents = [alpha.path, beta.path]
+    check("recent-search-refreshes-with-history", table.numberOfRows == 1)
+    search.stringValue = ""
+    search.sendAction(search.action, to: search.target)
+    check("recent-search-clears-filter", table.numberOfRows == 2)
   }
   func benchmark(mb: Int, single: Bool) async {
     do {

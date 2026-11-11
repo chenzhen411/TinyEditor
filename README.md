@@ -1,12 +1,12 @@
 # TinyEditor
 
-面向本地文本文件的轻量原生 macOS 编辑器。当前版本 **1.0.5**：新增 Shell（`.sh`）和 SQL（`.sql`）的自动识别、手动格式选择与词法高亮。应用名 **TinyEditor**，无空格。最低 macOS 13；本次构建为 **Apple Silicon / arm64**。
+面向本地文本文件的轻量原生 macOS 编辑器。**v1.0.6** 为最近文件侧边栏加入双行文件信息、随栏宽调整的截断，以及按文件名和路径搜索。最低 macOS 13，安装包适用于 **Apple Silicon / arm64**。
 
-仓库现已公开：[chenzhen411/TinyEditor](https://github.com/chenzhen411/TinyEditor)。**v1.0.5 为正式 Release，已设为 [Latest](https://github.com/chenzhen411/TinyEditor/releases/latest)**。应用采用 ad hoc 本地签名，尚无 Developer ID 签名及 Apple 公证；GitHub 的正式发行标记与 Apple 签名、公证状态相互独立，所需条件见 [签名发行说明](docs/SIGNING.md)。
+**v1.0.6 是 [GitHub 最新正式版](https://github.com/chenzhen411/TinyEditor/releases/latest)**。应用采用 ad hoc 本地签名，尚无 Developer ID 签名及 Apple 公证。详见 [签名发行说明](docs/SIGNING.md)。
 
 - TXT、Markdown、JSON、YAML、Shell、SQL；标题栏手动选择格式并按文件路径记忆。
 - AppKit 原生纯文本编辑、撤销/重做、查找/替换、逻辑行号与自动换行。
-- 多窗口、多标签、标签重排/拆窗/合并、共享最近文件列表与独立窗口侧边栏。
+- 多窗口、多标签、标签重排/拆窗/合并、共享最近文件列表与独立窗口侧边栏。最近文件分两行显示文件名和路径，悬停可查看完整内容。
 - Markdown 默认预览，离线表格、任务列表、代码高亮、Mermaid、KaTeX 和经过过滤的 HTML。
 - 预览复制映射回源码，保留 Markdown 语法、转义、实体、围栏与换行。语法选区会扩展到完整源码块；普通文本支持精确子串。
 - UTF-8、UTF-8 BOM、UTF-16 LE/BE BOM、GB18030 无损读写；原子保存、外部修改保护、本地恢复草稿。
@@ -14,7 +14,7 @@
 
 ## 运行与安装
 
-从 [GitHub 最新正式版](https://github.com/chenzhen411/TinyEditor/releases/latest) 下载 `TinyEditor-macOS-arm64.dmg`，打开后将 `TinyEditor.app` 拖入 `Applications`。下方 curl 命令固定下载 v1.0.5，便于复现与校验。如已安装旧版，先保存文档并按 ⌘Q 正常退出。项目内也提供 `artifacts/TinyEditor.app`。Finder 可用“打开方式”打开文本文件，也可将文件拖到 Dock 图标。
+从 [GitHub 最新正式版](https://github.com/chenzhen411/TinyEditor/releases/latest) 下载 `TinyEditor-macOS-arm64.dmg`，打开后将 `TinyEditor.app` 拖入 `Applications`。下方 curl 命令固定下载 v1.0.6，便于复现与校验。如已安装旧版，先保存文档并按 ⌘Q 正常退出。项目内也提供 `artifacts/TinyEditor.app`。Finder 可用“打开方式”打开文本文件，也可将文件拖到 Dock 图标。
 
 本次应用采用 **ad hoc 本地签名**，没有 Developer ID 签名及 Apple 公证。跨机器下载时 macOS 可能要求通过系统提供的打开流程确认。
 
@@ -34,7 +34,7 @@
     exit 1
   fi
   tinyeditor_tmp="$(mktemp -d)"
-  tinyeditor_url='https://github.com/chenzhen411/TinyEditor/releases/download/v1.0.5'
+  tinyeditor_url='https://github.com/chenzhen411/TinyEditor/releases/download/v1.0.6'
   curl -fL --retry 3 "$tinyeditor_url/TinyEditor-macOS-arm64.dmg" -o "$tinyeditor_tmp/TinyEditor-macOS-arm64.dmg"
   curl -fL --retry 3 "$tinyeditor_url/SHA256SUMS.txt" -o "$tinyeditor_tmp/SHA256SUMS.txt"
   (cd "$tinyeditor_tmp" && shasum -a 256 -c SHA256SUMS.txt)

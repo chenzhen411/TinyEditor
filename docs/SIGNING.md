@@ -2,7 +2,9 @@
 
 2026-10-31：仓库已改为 public，以不带登录凭据的 GitHub API 确认源码和 v1.0.4 安装包可公开访问。对全部本地可达历史的 209 个 Git blob 检查了常见私钥、访问令牌格式及证书凭据文件名，未发现匹配项。此为定向检查，并非对所有秘密格式的保证。实际结果见 publication-results.json。
 
-2026-11-02：当前 v1.0.5 / build 6 已设为 GitHub 正式 Release 与 Latest，继续使用 ad hoc 本地签名，未经过 Apple 公证。此次提升仅修改发行标记和文档，未替换应用、DMG 或校验和。GitHub 的正式发行标记与 Apple 签名、公证状态相互独立，验证结果见 evidence/1.0.5-stable-release.json。
+2026-11-02：v1.0.5 / build 6 从预发布转为 GitHub 正式 Release，并设为当时的 Latest。此次提升保留了应用、DMG 和校验和，验证结果见 evidence/1.0.5-stable-release.json。
+
+v1.0.6 / build 7 的 GitHub 正式版采用 ad hoc 本地签名，未经过 Apple 公证。
 
 ## 尚缺的条件
 

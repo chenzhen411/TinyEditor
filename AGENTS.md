@@ -99,3 +99,8 @@ Initial environment: macOS 27.2, arm64; Swift 6.4 CLI tools, no full Xcode requi
 - User explicitly requested promotion of v1.0.5 from prerelease to a stable GitHub Release and Latest. README links to releases/latest; curl instructions stay pinned to v1.0.5.
 - GitHub release maturity is independent of Apple signing/notarization. Keep accurate ad hoc / not notarized disclosures; do not use missing Developer ID as a reason to force prerelease status.
 - Promotion changes release metadata and documentation only; preserve tag, DMG and checksum assets. Verify prerelease=false and /releases/latest resolves to v1.0.5; record evidence without claiming new app tests or a rebuild.
+
+## v1.0.6 recent files sidebar (2026-11-11)
+- Recent rows use two single-line labels constrained to the cell width. The filename truncates in the middle. The secondary path shows the full path when it fits and keeps the directory visible when space is limited. The row tooltip contains the original filename and path.
+- The sidebar search filters the stored paths as text changes. Display and opening use the same filtered list.
+- 27 targeted AppKit checks passed with isolated settings. Real UI checks covered filename and path search, clicking the correct same-named file, and clearing search. Installed build 7 from verified arm64 output. See docs/VALIDATION.md.

@@ -246,12 +246,72 @@ final class SidebarSplitView: NSSplitView {
   }
 }
 
+final class RecentFileCell: NSTableCellView {
+  static let identifier = NSUserInterfaceItemIdentifier("recentFile")
+  let nameLabel = NSTextField(labelWithString: "")
+  let pathLabel = NSTextField(labelWithString: "")
+  private(set) var fullPath = ""
+  private var abbreviatedPath = ""
+
+  override init(frame frameRect: NSRect) {
+    super.init(frame: frameRect)
+    identifier = Self.identifier
+    clipsToBounds = true
+    textField = nameLabel
+    nameLabel.font = .systemFont(ofSize: 12)
+    pathLabel.font = .systemFont(ofSize: 10)
+    pathLabel.textColor = .secondaryLabelColor
+    for label in [nameLabel, pathLabel] {
+      label.usesSingleLineMode = true
+      label.maximumNumberOfLines = 1
+      label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+      label.translatesAutoresizingMaskIntoConstraints = false
+      addSubview(label)
+      NSLayoutConstraint.activate([
+        label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 9),
+        label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -9),
+      ])
+    }
+    nameLabel.lineBreakMode = .byTruncatingMiddle
+    pathLabel.lineBreakMode = .byTruncatingHead
+    NSLayoutConstraint.activate([
+      nameLabel.bottomAnchor.constraint(equalTo: centerYAnchor, constant: -1),
+      pathLabel.topAnchor.constraint(equalTo: centerYAnchor, constant: 1),
+    ])
+  }
+
+  required init?(coder: NSCoder) { fatalError() }
+
+  func show(path: String) {
+    let url = URL(fileURLWithPath: path)
+    let name = url.lastPathComponent
+    fullPath = path
+    abbreviatedPath = url.deletingLastPathComponent().appendingPathComponent("…").path
+    nameLabel.stringValue = name
+    pathLabel.stringValue = path
+    pathLabel.setAccessibilityValue(path)
+    toolTip = name + "\n" + path
+    needsLayout = true
+  }
+
+  override func layout() {
+    super.layout()
+    guard let font = pathLabel.font else { return }
+    let width = (fullPath as NSString).size(withAttributes: [.font: font]).width
+    let textBounds = pathLabel.cell?.titleRect(forBounds: pathLabel.bounds) ?? pathLabel.bounds
+    // Keep the directory visible when a long filename would hide it on both lines.
+    let path = width <= textBounds.width ? fullPath : abbreviatedPath
+    if pathLabel.stringValue != path { pathLabel.stringValue = path }
+  }
+}
+
 final class EditorWindowController: NSWindowController, NSWindowDelegate, NSToolbarDelegate,
   NSTableViewDataSource, NSTableViewDelegate, NSSplitViewDelegate
 {
   var documents: [EditorDocument] = []
   var active: EditorDocument?
-  let tabStrip = TabStrip(), split = SidebarSplitView(), sidebar = NSScrollView(),
+  let tabStrip = TabStrip(), split = SidebarSplitView(), sidebar = NSView(),
+    recentScroll = NSScrollView(), recentSearch = NSSearchField(),
     recentTable = NSTableView(), documentArea = TabDropView(), host = TabDropView(),
     status = NSVisualEffectView(), statusText = NSTextField(labelWithString: "")
   let sidebarButton = NSButton(), formatPopup = NSPopUpButton(), zoomMinus = NSButton(),
@@ -260,6 +320,7 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
       labels: ["预览", "编辑"], trackingMode: .selectOne, target: nil, action: nil)
   var sidebarVisible = false, sidebarWidth: CGFloat = 220
   var dropOverlay: DropOverlay?
+  private var visibleRecentPaths: [String] = []
   private var isLayingOut = false
   var closingAll = false
   var conflictPrompted: Set<UUID> = []
@@ -299,16 +360,36 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     split.delegate = self
     split.addArrangedSubview(sidebar)
     split.addArrangedSubview(documentArea)
-    sidebar.documentView = recentTable
-    sidebar.hasVerticalScroller = true
-    sidebar.autohidesScrollers = true
-    sidebar.borderType = .noBorder
-    sidebar.drawsBackground = false
+    recentSearch.placeholderString = "搜索文件名或路径"
+    recentSearch.setAccessibilityLabel("搜索最近文件")
+    recentSearch.sendsWholeSearchString = false
+    recentSearch.sendsSearchStringImmediately = true
+    recentSearch.target = self
+    recentSearch.action = #selector(recentChanged)
+    recentScroll.documentView = recentTable
+    recentScroll.hasVerticalScroller = true
+    recentScroll.autohidesScrollers = true
+    recentScroll.drawsBackground = false
+    for view in [recentSearch, recentScroll] as [NSView] {
+      view.translatesAutoresizingMaskIntoConstraints = false
+      sidebar.addSubview(view)
+    }
+    NSLayoutConstraint.activate([
+      recentSearch.topAnchor.constraint(equalTo: sidebar.topAnchor, constant: 8),
+      recentSearch.leadingAnchor.constraint(equalTo: sidebar.leadingAnchor, constant: 8),
+      recentSearch.trailingAnchor.constraint(equalTo: sidebar.trailingAnchor, constant: -8),
+      recentScroll.topAnchor.constraint(equalTo: recentSearch.bottomAnchor, constant: 6),
+      recentScroll.leadingAnchor.constraint(equalTo: sidebar.leadingAnchor),
+      recentScroll.trailingAnchor.constraint(equalTo: sidebar.trailingAnchor),
+      recentScroll.bottomAnchor.constraint(equalTo: sidebar.bottomAnchor),
+    ])
     let col = NSTableColumn(identifier: NSUserInterfaceItemIdentifier("recent"))
     col.title = "最近文件"
+    col.minWidth = 0
+    col.resizingMask = .autoresizingMask
     recentTable.addTableColumn(col)
     recentTable.headerView = nil
-    recentTable.rowHeight = 26
+    recentTable.rowHeight = 42
     recentTable.intercellSpacing = NSSize(width: 0, height: 1)
     recentTable.style = .sourceList
     recentTable.dataSource = self
@@ -317,6 +398,8 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     recentTable.doubleAction = #selector(openRecent)
     recentTable.action = #selector(openRecent)
     recentTable.columnAutoresizingStyle = .uniformColumnAutoresizingStyle
+    recentTable.autoresizingMask = [.width]
+    recentChanged()
     documentArea.addSubview(tabStrip)
     documentArea.addSubview(host)
     documentArea.addSubview(status)
@@ -523,26 +606,24 @@ final class EditorWindowController: NSWindowController, NSWindowDelegate, NSTool
     updateChrome()
     tabStrip.refresh()
   }
-  @objc func recentChanged() { recentTable.reloadData() }
-  func numberOfRows(in tableView: NSTableView) -> Int { Settings.shared.recents.count }
+  @objc func recentChanged() {
+    let query = recentSearch.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+    let paths = Settings.shared.recents
+    visibleRecentPaths = query.isEmpty ? paths : paths.filter { $0.localizedStandardContains(query) }
+    recentTable.reloadData()
+  }
+  func numberOfRows(in tableView: NSTableView) -> Int { visibleRecentPaths.count }
   func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView?
   {
-    let cell = NSTableCellView()
-    let label = NSTextField(
-      labelWithString: URL(fileURLWithPath: Settings.shared.recents[row]).lastPathComponent)
-    label.font = .systemFont(ofSize: 12)
-    label.lineBreakMode = .byTruncatingMiddle
-    label.frame = NSRect(x: 10, y: 4, width: max(0, tableView.bounds.width - 20), height: 18)
-    label.autoresizingMask = [.width]
-    cell.addSubview(label)
-    cell.textField = label
-    cell.toolTip = Settings.shared.recents[row]
+    let cell = tableView.makeView(withIdentifier: RecentFileCell.identifier, owner: self)
+      as? RecentFileCell ?? RecentFileCell(frame: .zero)
+    cell.show(path: visibleRecentPaths[row])
     return cell
   }
   @objc func openRecent() {
     let row = recentTable.clickedRow
-    guard row >= 0, row < Settings.shared.recents.count else { return }
-    AppController.shared.open(urls: [URL(fileURLWithPath: Settings.shared.recents[row])], in: self)
+    guard visibleRecentPaths.indices.contains(row) else { return }
+    AppController.shared.open(urls: [URL(fileURLWithPath: visibleRecentPaths[row])], in: self)
   }
   func splitView(
     _ splitView: NSSplitView, constrainMinCoordinate proposedMinimumPosition: CGFloat,
